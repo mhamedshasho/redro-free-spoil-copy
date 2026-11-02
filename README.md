@@ -4,12 +4,15 @@ A mobile-first, local-first food inventory and expiry tracker.
 
 ## Current features
 - Add, edit, search, filter and delete inventory items.
+- Organize items by Fridge, Freezer and Pantry, with shelf or area locations.
+- Review expired and soon-to-expire items in a restock list and copy or download it.
 - Record quantity, unit, created/prepared date, expiry date and notes.
 - Automatic date-based freshness labels.
 - Local persistence with IndexedDB.
 - Export a complete JSON backup.
 - Import a backup by merging or replacing current records.
-- Print-friendly inventory for saving as PDF.
+- Print the complete inventory as PDF, independent of the current location or filters.
+- Export inventory snapshots as PNG (up to 200 items per image).
 - Installable offline PWA with a service worker.
 
 ## Run locally

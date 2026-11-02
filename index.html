@@ -30,7 +30,10 @@
           <h1 id="greetingTitle">Good day<span class="red-dot">.</span></h1>
           <p class="subheading" id="greetingSubtitle">Keep track of what you have and when it expires.</p>
         </div>
-        <button class="primary-button add-top" id="addItemTop"><span>＋</span> Add item</button>
+        <div class="heading-actions">
+          <button type="button" class="restock-button" id="restockToggle"><span class="restock-symbol" aria-hidden="true">↻</span><span id="restockLabel">Restock</span><b id="restockCount">0</b></button>
+          <button class="primary-button add-top" id="addItemTop"><span>＋</span> Add item</button>
+        </div>
       </section>
 
       <section class="summary-grid" aria-label="Inventory summary">
@@ -52,6 +55,7 @@
       </section>
 
       <section class="inventory-section">
+        <div class="storage-tabs" id="storageTabs" role="group" aria-label="Storage location"></div>
         <div class="section-heading">
           <div><p class="eyebrow">YOUR STOCK</p><h2>Inventory</h2></div>
           <button class="text-button" id="clearFilters">Clear filters</button>
@@ -72,6 +76,7 @@
           <div class="quick-add-heading"><strong id="quickAddTitle">Quick add</strong><button type="button" class="quick-add-close" id="quickAddClose" aria-label="Close">×</button></div>
           <input id="quickName" type="text" maxlength="90" placeholder="Item name" required autocomplete="off">
           <select id="quickCategory" class="category-select" aria-label="Group"></select>
+          <select id="quickLocation" class="category-select" aria-label="Storage location"></select>
           <div class="quick-add-fields"><input id="quickQuantity" type="number" min="0" step="any" value="1" aria-label="Quantity" required><select id="quickUnit" aria-label="Unit"><option>pcs</option><option>kg</option><option>g</option><option>L</option><option>ml</option><option>box</option><option>pack</option><option>bag</option><option>other</option></select><input id="quickExpiry" type="date" aria-label="Expiry date" required></div>
           <button class="primary-button quick-save" id="quickSave" type="submit">Add item</button>
         </form>
@@ -102,6 +107,10 @@
       <div class="dialog-header"><div><p class="eyebrow">INVENTORY ITEM</p><h2 id="formTitle">Add item</h2></div><button type="button" class="close-button" data-close="itemDialog" aria-label="Close">×</button></div>
       <input type="hidden" id="itemId">
       <label class="field-label">Group<select id="itemCategory" name="category" class="category-select"></select></label>
+      <div class="storage-fields">
+        <label class="storage-field" for="itemLocation"><span id="itemLocationLabel">Storage location</span><select id="itemLocation" name="storageLocation"></select></label>
+        <label class="storage-field" for="itemZone"><span id="itemZoneLabel">Shelf / area</span><select id="itemZone" name="storageZone"></select></label>
+      </div>
       <label class="field-label">Item name<input id="itemName" name="name" required maxlength="90" placeholder="e.g. Fresh milk"></label>
       <div class="field-row">
         <label class="field-label">Quantity<input id="itemQuantity" name="quantity" type="number" min="0" step="any" required placeholder="0"></label>
@@ -114,6 +123,14 @@
       <p class="form-error" id="formError" role="alert"></p>
       <div class="dialog-actions"><button type="button" class="secondary-button" data-close="itemDialog">Cancel</button><button type="submit" class="primary-button">Save item</button></div>
     </form>
+  </dialog>
+
+  <dialog class="app-dialog restock-sheet" id="restockDialog">
+    <div class="dialog-header"><div><p class="eyebrow" id="restockEyebrow">EXPIRY CHECK</p><h2 id="restockTitle">Restock list</h2></div><button type="button" class="close-button" data-close="restockDialog" aria-label="Close">×</button></div>
+    <p class="dialog-description" id="restockDescription">Choose items to add to your shopping list.</p>
+    <div id="restockList" class="restock-list"></div>
+    <p id="restockEmpty" class="restock-empty" hidden>Nothing needs restocking right now.</p>
+    <div class="dialog-actions"><button type="button" class="secondary-button" data-close="restockDialog" id="restockClose">Close</button><button type="button" class="primary-button" id="copyRestock" disabled>Copy selected</button></div>
   </dialog>
 
   <dialog class="app-dialog compact-dialog" id="settingsDialog">
@@ -143,7 +160,9 @@
     <p class="data-footnote">A merge keeps existing records and skips matching IDs. Replace permanently overwrites the current inventory on this device.</p>
   </dialog>
 
+  <section id="printInventory" class="print-only" aria-label="Full inventory for printing"></section>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
+  <script src="ui.js"></script>
 </body>
 </html>

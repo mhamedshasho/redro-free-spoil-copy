@@ -146,3 +146,63 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 @media(max-width:480px){.photo-picker{align-items:flex-start}.photo-preview{width:76px;height:76px;flex-basis:76px}.photo-controls{gap:6px}}
 
 .database-error{padding:14px 16px;border:1px solid #d98a8a;border-radius:14px;background:#fff0f0;color:#8f3030;font-size:14px;line-height:1.5}
+
+
+/* Reference-inspired inventory organization: location tabs, shelf groups and a mobile restock sheet. */
+.heading-actions{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.restock-button{min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 14px;border:1px solid color-mix(in srgb,var(--green) 24%,var(--line));border-radius:14px;background:var(--green-soft);color:var(--green);font-size:12px;font-weight:800;white-space:nowrap}
+.restock-symbol{font-size:17px;line-height:1}
+.restock-button b{min-width:22px;height:22px;display:grid;place-items:center;padding:0 5px;border-radius:999px;background:var(--green);color:#fff;font-size:10px}
+.storage-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;margin-bottom:23px;scrollbar-width:none;overscroll-behavior-x:contain}
+.storage-tabs::-webkit-scrollbar{display:none}
+.storage-tab{min-height:50px;display:flex;align-items:center;gap:9px;flex:1 0 125px;padding:0 14px;border:1px solid var(--line);border-radius:15px;background:var(--panel);color:var(--muted);font:inherit;font-size:12px;font-weight:700;white-space:nowrap;transition:background .16s ease,color .16s ease,border-color .16s ease,transform .16s ease}
+.storage-tab-icon{font-size:16px;color:var(--green)}
+.storage-tab b{margin-inline-start:auto;min-width:24px;height:24px;display:grid;place-items:center;padding:0 6px;border-radius:999px;background:var(--panel2);color:var(--muted);font-size:10px}
+.storage-tab.active{border-color:var(--green);background:var(--green);color:#fff;box-shadow:0 7px 18px color-mix(in srgb,var(--green) 22%,transparent)}
+.storage-tab.active .storage-tab-icon{color:#fff}
+.storage-tab.active b{background:#ffffff2b;color:#fff}
+.zone-section{margin:0 0 19px}
+.zone-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 2px 9px;padding:0 0 7px;border-bottom:1px solid var(--line)}
+.zone-heading h3{margin:0;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1.25px;text-transform:uppercase}
+.zone-heading>span{color:var(--muted);font-size:10px;white-space:nowrap}
+.zone-items{display:grid;gap:9px}
+.zone-items .item-card{box-shadow:0 3px 12px rgba(24,50,31,.035)}
+.zone-items .item-symbol{background:var(--green-soft);color:var(--green);font-size:22px}
+.storage-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 13px}
+.storage-field{display:grid;gap:7px;color:#33483a;font-size:11px;font-weight:700}
+.storage-field select{width:100%;min-width:0;height:43px;padding:0 10px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--text);font:inherit;font-size:13px}
+.storage-field select:focus{outline:2px solid var(--green);outline-offset:1px}
+.restock-sheet{max-width:480px}
+.restock-list{display:grid;gap:8px;max-height:min(50dvh,430px);overflow:auto;padding:1px 2px 4px}
+.restock-row{min-height:62px;display:flex;align-items:center;gap:11px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:var(--panel)}
+.restock-row input{width:19px;height:19px;flex:0 0 19px;accent-color:var(--green)}
+.restock-copy{min-width:0;flex:1}
+.restock-copy strong,.restock-copy small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.restock-copy strong{font-size:12px}
+.restock-copy small{margin-top:4px;color:var(--muted);font-size:10px}
+.restock-status{padding:5px 7px;border-radius:999px;font-size:9px;font-weight:800;white-space:nowrap}
+.restock-status.status-expired{background:#ffebec;color:#b42d38}
+.restock-status.status-soon{background:#fff3dc;color:#94600e}
+.restock-empty{padding:18px 12px;border:1px dashed var(--line);border-radius:13px;color:var(--muted);font-size:12px;text-align:center}
+#restockDialog .dialog-actions{margin-top:15px}
+#restockDialog .dialog-actions button{min-width:0}
+@media(min-width:700px){.zone-items{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){
+ .heading-actions{gap:7px}
+ .restock-button{min-height:43px;padding:0 10px;font-size:11px}
+ .storage-tabs{margin-right:-16px;padding-right:16px}
+ .storage-tab{flex:0 0 116px;min-height:48px;padding:0 11px;gap:7px}
+ .storage-fields{gap:8px}
+ .restock-sheet{width:100%;max-width:none;max-height:85dvh;margin:auto auto 0;border-radius:23px 23px 0 0;padding-bottom:calc(17px + env(safe-area-inset-bottom))}
+ .restock-sheet::backdrop{background:#0007}
+ .restock-list{max-height:48dvh}
+}
+@media(max-width:380px){.page-heading{align-items:flex-start}.heading-actions{flex-direction:column;align-items:stretch}.heading-actions>*{min-height:38px}.restock-button{min-height:38px}.add-top{width:43px;height:43px}}
+:root[data-theme="dark"] .storage-field{color:var(--text)}
+:root[data-theme="dark"] .restock-status.status-expired{background:#482329;color:#ff9aa0}
+:root[data-theme="dark"] .restock-status.status-soon{background:#3b3020;color:#e8b65f}
+:root[dir="rtl"] .zone-heading{direction:rtl}
+
+@media(max-width:600px){.item-card{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center}.item-card .item-symbol{flex:initial;width:34px;height:34px}.item-card .item-status{grid-column:2;justify-self:start}.item-card .item-actions{grid-column:3;grid-row:1/3;display:flex;flex-direction:column}.group-delete{min-width:44px;min-height:44px}}
+.status-unknown{background:var(--panel2);color:var(--muted)}
+@media print{body.printing-all .app-shell{display:none!important}body.printing-all #printInventory{display:block!important;max-width:100%;padding:0;color:#111;background:#fff;font:12px/1.4 Arial,sans-serif}body.printing-all #printInventory header{margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #315b40}body.printing-all #printInventory h1{margin:0 0 4px;font-size:22px}body.printing-all #printInventory p{margin:0;color:#666}body.printing-all #printInventory .print-location{break-inside:avoid;margin:18px 0}body.printing-all #printInventory h2{margin:0 0 9px;padding:6px 8px;background:#e4f0e7;font-size:16px}body.printing-all #printInventory h3{margin:9px 0 5px;font-size:12px}body.printing-all #printInventory table{width:100%;border-collapse:collapse;margin-bottom:10px}body.printing-all #printInventory th,body.printing-all #printInventory td{padding:6px 7px;border:1px solid #d7dfd9;text-align:start}body.printing-all #printInventory th{background:#f3f6f3}}
