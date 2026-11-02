@@ -576,7 +576,13 @@ deleteItem = async function deleteLocationAwareItemWithConflictCheck(id) {
 };
 
 exportPdf = async function exportCompleteInventoryPdf() {
-  let printFrame;
+  let printRoot;
+  const cleanup = () => {
+    document.body.classList.remove("pdf-exporting");
+    if (printRoot?.isConnected) printRoot.remove();
+    window.removeEventListener("afterprint", cleanup);
+    window.removeEventListener("focus", cleanup);
+  };
   try {
     const rows = (await getAll()).slice().sort((a,b) => String(a.expiryDate || "").localeCompare(String(b.expiryDate || "")));
     const tableRows = rows.map(item => {
@@ -585,34 +591,23 @@ exportPdf = async function exportCompleteInventoryPdf() {
     }).join("");
     const content = rows.length
       ? "<table><thead><tr><th>Item</th><th>Quantity</th><th>Group</th><th>Created / prepared</th><th>Expiry</th><th>Storage</th><th>Status</th><th>Notes</th></tr></thead><tbody>" + tableRows + "</tbody></table>"
-      : "<p class='empty'>No inventory items to export.</p>";
-    const html = "<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Redro Food Stock - Inventory</title><style>@page{size:auto;margin:12mm}*{box-sizing:border-box}body{font:12px/1.45 Arial,sans-serif;color:#17231b;margin:0}header{margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #23864b}h1{font-size:22px;margin:0 0 5px}header p{margin:0;color:#59665d}table{width:100%;border-collapse:collapse}th,td{border:1px solid #cbd5cd;padding:7px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e8f1e9}tr{break-inside:avoid}.empty{padding:20px;border:1px dashed #9aa99d}@media(max-width:600px){body{font-size:10px}th,td{padding:4px;font-size:9px}}</style></head><body><header><h1>Redro Food Stock</h1><p>" + escapeHtml(new Date().toLocaleDateString()) + " · " + rows.length + " items</p></header>" + content + "</body></html>";
-    printFrame = document.createElement("iframe");
-    printFrame.setAttribute("title", "Inventory PDF print view");
-    printFrame.style.cssText = "position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none";
-    document.body.append(printFrame);
-    const printDocument = printFrame.contentDocument;
-    if (!printDocument || !printFrame.contentWindow || typeof printFrame.contentWindow.print !== "function") throw new Error("Print view is unavailable");
-    printDocument.open();
-    printDocument.write(html);
-    printDocument.close();
-    await new Promise(resolve => setTimeout(resolve, 300));
-    printFrame.contentWindow.focus();
-    printFrame.contentWindow.print();
-    const cleanup = () => {
-      if (printFrame?.isConnected) printFrame.remove();
-      window.removeEventListener("focus", cleanup);
-    };
-    printFrame.contentWindow.addEventListener("afterprint", cleanup, {once:true});
+      : "<p class='pdf-empty'>No inventory items to export.</p>";
+    printRoot = document.createElement("section");
+    printRoot.id = "pdfExportRoot";
+    printRoot.innerHTML = "<header><h1>Redro Food Stock</h1><p>" + escapeHtml(new Date().toLocaleDateString()) + " · " + rows.length + " items</p></header>" + content;
+    document.body.append(printRoot);
+    document.body.classList.add("pdf-exporting");
+    window.addEventListener("afterprint", cleanup, {once:true});
     window.addEventListener("focus", cleanup, {once:true});
-    setTimeout(cleanup, 60000);
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    window.print();
+    setTimeout(cleanup, 120000);
   } catch (error) {
-    if (printFrame?.isConnected) printFrame.remove();
+    cleanup();
     console.error("Redro PDF export failed:", error);
     showToast(t("dbError") + " (" + (error?.message || "Print failed") + ")");
   }
 };
-
 exportPng = function exportBoundedPng() {
   const rows = items.slice().sort((a,b) => a.expiryDate.localeCompare(b.expiryDate));
   if (rows.length > 200) { showToast(t("pngLimit")); return; }
