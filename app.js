@@ -1,5 +1,5 @@
-const DB_NAME="redro-food-stock";const DB_VERSION=1;const STORE="items";let db;let items=[];let activeFilter="all";let activeGroup="all";let groups=loadStoredGroups();let pendingImport=null;let toastTimer;
-const DEFAULT_GROUPS=["Vegetables","Fruits","Dairy","Meat & Fish","Bakery","Drinks","Other"];
+const DB_NAME="redro-food-stock";const DB_VERSION=1;const STORE="items";const DEFAULT_GROUPS=["Vegetables","Fruits","Dairy","Meat & Fish","Bakery","Drinks","Other"];
+let db;let items=[];let activeFilter="all";let activeGroup="all";let groups=loadStoredGroups();let pendingImport=null;let toastTimer;
 function loadStoredGroups(){try{const value=JSON.parse(localStorage.getItem("redro-food-stock-groups")||"null");if(Array.isArray(value)){const safe=[...new Set(value.filter(x=>typeof x==="string").map(x=>x.trim()).filter(Boolean).slice(0,99))];if(!safe.includes("Other"))safe.push("Other");return safe;}}catch(error){console.warn("Redro group preferences could not be read; using defaults.",error);}return [...DEFAULT_GROUPS];}
 function saveStoredGroups(value){try{localStorage.setItem("redro-food-stock-groups",JSON.stringify(value));return true;}catch(error){console.warn("Redro group preferences could not be saved.",error);return false;}}
 const $=id=>document.getElementById(id);
