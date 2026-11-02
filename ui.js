@@ -577,31 +577,37 @@ deleteItem = async function deleteLocationAwareItemWithConflictCheck(id) {
 
 exportPdf = function exportCompleteInventoryPdf() {
   const printArea = $("printInventory");
-  if (!printArea) { window.print(); return; }
-  const rows = items.slice().sort((a,b) => a.expiryDate.localeCompare(b.expiryDate));
-  const locationSections = STORAGE_LOCATIONS.map(location => {
-    const locationRows = rows.filter(item => storageLocationOf(item) === location);
-    if (!locationRows.length) return "";
-    const zoneSections = zonesFor(location).map(zone => {
-      const zoneRows = locationRows.filter(item => storageZoneOf(item) === zone);
-      if (!zoneRows.length) return "";
-      const cards = zoneRows.map(item => '<tr><td>' + escapeHtml(item.name) + '</td><td>' + escapeHtml(item.quantity + " " + item.unit) + '</td><td>' + escapeHtml(groupLabel(item.category || "Other")) + '</td><td>' + escapeHtml(item.expiryDate) + '</td><td>' + escapeHtml(statusOf(item).label) + '</td></tr>').join("");
-      return '<h3>' + escapeHtml(zoneLabel(zone)) + '</h3><table><thead><tr><th>Item</th><th>Quantity</th><th>Group</th><th>Expiry</th><th>Status</th></tr></thead><tbody>' + cards + '</tbody></table>';
-    }).join("");
-    return '<section class="print-location"><h2>' + escapeHtml(locationLabel(location)) + '</h2>' + zoneSections + '</section>';
+  if (!printArea) { showToast(t("dbError")); return; }
+  if (typeof window.print !== "function") { showToast(t("dbError")); return; }
+  const rows = items.slice().sort((a,b) => String(a.expiryDate || "").localeCompare(String(b.expiryDate || "")));
+  const tableRows = rows.map(item => {
+    const storage = locationLabel(storageLocationOf(item)) + " · " + zoneLabel(storageZoneOf(item));
+    return "<tr><td>" + escapeHtml(item.name) + "</td><td>" + escapeHtml(item.quantity + " " + item.unit) + "</td><td>" + escapeHtml(groupLabel(item.category || "Other")) + "</td><td>" + escapeHtml(item.createdDate || "—") + "</td><td>" + escapeHtml(item.expiryDate || "—") + "</td><td>" + escapeHtml(storage) + "</td><td>" + escapeHtml(statusOf(item).label) + "</td><td>" + escapeHtml(item.notes || "—") + "</td></tr>";
   }).join("");
-  printArea.innerHTML = '<header><h1>Redro Food Stock</h1><p>' + escapeHtml(new Date().toLocaleDateString()) + ' · ' + rows.length + ' items</p></header>' + (locationSections || '<p>No items in your inventory.</p>');
+  const body = rows.length
+    ? "<table><thead><tr><th>Item</th><th>Quantity</th><th>Group</th><th>Created / prepared</th><th>Expiry</th><th>Storage</th><th>Status</th><th>Notes</th></tr></thead><tbody>" + tableRows + "</tbody></table>"
+    : "<p class='print-empty'>No inventory items to export.</p>";
+  printArea.innerHTML = "<header><h1>Redro Food Stock</h1><p>" + escapeHtml(new Date().toLocaleDateString()) + " · " + rows.length + " items</p></header>" + body;
   const oldTitle = document.title;
   let cleaned = false;
   const cleanup = () => {
     if (cleaned) return;
-    cleaned = true; document.body.classList.remove("printing-all"); printArea.replaceChildren(); document.title = oldTitle;
+    cleaned = true;
+    document.body.classList.remove("printing-all");
+    printArea.replaceChildren();
+    document.title = oldTitle;
     window.removeEventListener("afterprint", cleanup);
   };
   document.title = "Redro Food Stock - Inventory";
   document.body.classList.add("printing-all");
   window.addEventListener("afterprint", cleanup, {once:true});
-  try { window.print(); } catch (error) { cleanup(); showToast(t("dbError")); }
+  try {
+    window.print();
+  } catch (error) {
+    cleanup();
+    console.error("Redro PDF export failed:", error);
+    showToast(t("dbError"));
+  }
 };
 
 exportPng = function exportBoundedPng() {
