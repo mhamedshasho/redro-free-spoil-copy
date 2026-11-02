@@ -67,9 +67,11 @@
           <button class="filter-chip" data-filter="soon">Expiring</button>
           <button class="filter-chip" data-filter="expired">Expired</button>
         </div>
+        <div class="group-tools"><div class="group-heading"><strong id="groupsTitle">Groups</strong><button type="button" id="addGroupToggle" class="group-add-toggle">+ Group</button></div><form id="newGroupForm" class="new-group-form" hidden><input id="newGroupName" maxlength="32" placeholder="New group name" required><button type="submit">Add</button></form><div class="group-chips" id="groupChips"></div></div>
         <form class="quick-add" id="quickAddForm" hidden>
           <div class="quick-add-heading"><strong id="quickAddTitle">Quick add</strong><button type="button" class="quick-add-close" id="quickAddClose" aria-label="Close">×</button></div>
           <input id="quickName" type="text" maxlength="90" placeholder="Item name" required autocomplete="off">
+          <select id="quickCategory" class="category-select" aria-label="Group"></select>
           <div class="quick-add-fields"><input id="quickQuantity" type="number" min="0" step="any" value="1" aria-label="Quantity" required><select id="quickUnit" aria-label="Unit"><option>pcs</option><option>kg</option><option>g</option><option>L</option><option>ml</option><option>box</option><option>pack</option><option>bag</option><option>other</option></select><input id="quickExpiry" type="date" aria-label="Expiry date" required></div>
           <button class="primary-button quick-save" id="quickSave" type="submit">Add item</button>
         </form>
@@ -99,6 +101,7 @@
     <form id="itemForm" method="dialog">
       <div class="dialog-header"><div><p class="eyebrow">INVENTORY ITEM</p><h2 id="formTitle">Add item</h2></div><button type="button" class="close-button" data-close="itemDialog" aria-label="Close">×</button></div>
       <input type="hidden" id="itemId">
+      <label class="field-label">Group<select id="itemCategory" name="category" class="category-select"></select></label>
       <label class="field-label">Item name<input id="itemName" name="name" required maxlength="90" placeholder="e.g. Fresh milk"></label>
       <div class="field-row">
         <label class="field-label">Quantity<input id="itemQuantity" name="quantity" type="number" min="0" step="any" required placeholder="0"></label>
