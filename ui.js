@@ -300,6 +300,7 @@ openQuickAdd = function openLocationAwareQuickAdd() {
   originalOpenQuickAdd();
   renderStorageSelects(activeLocation);
   $("quickLocation").value = activeLocation;
+  $("quickCreatedDate").value = today();
 };
 applyPreferences = function applyLocationAwarePreferences() {
   originalApplyPreferences();
@@ -512,10 +513,12 @@ saveQuickItem = async function saveLocationAwareQuickItemWithSync(event) {
   event.preventDefault();
   const name = $("quickName").value.trim();
   const quantity = Number($("quickQuantity").value);
+  const createdDate = $("quickCreatedDate").value;
   const expiryDate = $("quickExpiry").value;
   const storageLocation = STORAGE_LOCATIONS.includes($("quickLocation").value) ? $("quickLocation").value : activeLocation;
-  if (!name || !Number.isFinite(quantity) || quantity < 0 || !expiryDate) { $("quickName").focus(); return; }
-  const record = {id:makeId(),name,quantity,unit:$("quickUnit").value,category:$("quickCategory").value||"Other",storageLocation,storageZone:zonesFor(storageLocation)[0],createdDate:today(),expiryDate,notes:"",updatedAt:new Date().toISOString()};
+  if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || !expiryDate) { $("quickName").focus(); return; }
+  if (expiryDate < createdDate) { showToast(t("dateError")); $("quickExpiry").focus(); return; }
+  const record = {id:makeId(),name,quantity,unit:$("quickUnit").value,category:$("quickCategory").value||"Other",storageLocation,storageZone:zonesFor(storageLocation)[0],createdDate,expiryDate,notes:"",updatedAt:new Date().toISOString()};
   const button = $("quickSave"); button.disabled = true;
   try {
     await persistNewRecord(record);
