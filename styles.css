@@ -69,3 +69,17 @@
 #itemDialog{max-width:440px}
 #itemNotes{min-height:64px}
 @media(max-width:480px){.app-dialog{padding:17px;width:calc(100% - 22px)}.dialog-header{margin-bottom:14px}.field-label{margin-bottom:10px}.field-row{gap:8px}.dialog-actions{margin-top:12px}}
+
+:root[data-theme="light"]{color-scheme:light;--bg:#f5f8f5;--panel:#fff;--panel2:#edf3ee;--line:#dce6de;--text:#18251c;--muted:#718075;--red:#23864b;--red-soft:#e2f2e7;--green:#23864b;--green-soft:#e2f2e7;--amber:#a66a13;--amber-soft:#fff2d9;--danger:#c43c45;--accent:#23864b;--accent-strong:#176a39}
+:root[data-theme="light"] .app-dialog{background:#fff!important;color:#18251c!important;border-color:#dce6de!important}
+:root[data-theme="light"] .app-dialog .eyebrow{color:#718075}
+:root[data-theme="light"] .app-dialog .field-label{color:#33483a}
+:root[data-theme="light"] .app-dialog input,:root[data-theme="light"] .app-dialog select,:root[data-theme="light"] .app-dialog textarea{color:#18251c;background:#f7faf7;border-color:#d5e1d7}
+:root[data-theme="light"] .app-dialog select option{color:#18251c;background:#fff}
+:root[data-theme="light"] .app-dialog .close-button{color:#33483a;background:#f2f6f2;border-color:#dce6de}
+:root[data-theme="light"] .app-dialog .secondary-button{color:#294331;background:#edf3ee;border-color:#d5e1d7}
+:root[data-theme="light"] .app-dialog .danger-button{color:#a52f38;background:#fff0f0;border-color:#f0caca}
+:root[data-theme="light"] .app-dialog .data-action{color:#18251c;background:#f7faf7;border-color:#dce6de}
+:root[data-theme="light"] .app-dialog .data-footnote{color:#718075}
+:root[data-theme="light"] .app-dialog .dialog-description{color:#65786a}
+:root[data-theme="light"] .app-dialog .profile-card{background:#f2f7f3;border-color:#dce6de}
