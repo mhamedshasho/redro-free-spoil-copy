@@ -215,3 +215,5 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .quick-field input,.quick-field select{min-width:0;width:100%;height:43px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--text);padding:0 11px;font:inherit;font-size:13px}
 .quick-tip{display:block;color:var(--muted);font-size:11px;font-weight:400;line-height:1.45}
 .quick-add-fields .quick-field{min-width:0}
+
+.quick-add-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.quick-date-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:10px;border:1px solid var(--green);border-radius:12px;background:var(--green-soft)}.quick-date-fields .quick-field{min-width:0}.quick-date-fields input[type=date]{width:100%;min-width:0;height:46px;font-size:14px}.quick-date-fields .quick-tip{font-size:11px}@media(max-width:420px){.quick-date-fields{grid-template-columns:1fr}.quick-add-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
