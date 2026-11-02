@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#171719">
+  <meta name="description" content="Private, offline food stock and expiry tracker.">
+  <title>Redro Food Stock</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Redro Food Stock home">
+        <span class="brand-mark">R</span>
+        <span><strong>Redro</strong><small>FOOD STOCK</small></span>
+      </a>
+      <div class="top-actions">
+        <button class="icon-button" id="searchToggle" aria-label="Search" title="Search">⌕</button>
+        <button class="icon-button" id="settingsToggle" aria-label="Data and settings" title="Data and settings">⋯</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow" id="todayLabel">YOUR INVENTORY</p>
+          <h1>Good day<span class="red-dot">.</span></h1>
+          <p class="subheading">Keep track of what you have and when it expires.</p>
+        </div>
+        <button class="primary-button add-top" id="addItemTop"><span>＋</span> Add item</button>
+      </section>
+
+      <section class="summary-grid" aria-label="Inventory summary">
+        <article class="summary-card total-card">
+          <span class="summary-label">TOTAL ITEMS</span>
+          <strong id="totalCount">0</strong>
+          <span class="summary-foot">In your inventory</span>
+        </article>
+        <article class="summary-card soon-card">
+          <span class="summary-label">EXPIRING SOON</span>
+          <strong id="soonCount">0</strong>
+          <span class="summary-foot">Within 3 days</span>
+        </article>
+        <article class="summary-card expired-card">
+          <span class="summary-label">EXPIRED</span>
+          <strong id="expiredCount">0</strong>
+          <span class="summary-foot">Past expiry date</span>
+        </article>
+      </section>
+
+      <section class="inventory-section">
+        <div class="section-heading">
+          <div><p class="eyebrow">YOUR STOCK</p><h2>Inventory</h2></div>
+          <button class="text-button" id="clearFilters">Clear filters</button>
+        </div>
+        <label class="search-field" id="searchField">
+          <span aria-hidden="true">⌕</span>
+          <input id="searchInput" type="search" placeholder="Search items..." autocomplete="off">
+          <kbd>⌘ K</kbd>
+        </label>
+        <div class="filter-row" role="group" aria-label="Filter inventory">
+          <button class="filter-chip active" data-filter="all">All <span id="filterAll">0</span></button>
+          <button class="filter-chip" data-filter="fresh">Fresh</button>
+          <button class="filter-chip" data-filter="soon">Expiring</button>
+          <button class="filter-chip" data-filter="expired">Expired</button>
+        </div>
+        <div class="inventory-list" id="inventoryList" aria-live="polite"></div>
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">＋</div>
+          <h3>Your inventory starts here</h3>
+          <p>Add your first item to keep its quantity and expiry date in one place.</p>
+          <button class="primary-button" id="emptyAdd">Add your first item</button>
+        </div>
+      </section>
+
+      <section class="privacy-note">
+        <span class="lock-icon">⌑</span>
+        <div><strong>Your data stays on this device</strong><p>No account. No cloud. No internet required for your inventory.</p></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <a class="nav-item selected" href="#" aria-current="page"><span>▦</span><small>Inventory</small></a>
+      <button class="nav-item" id="navAdd"><span class="nav-add">＋</span><small>Add item</small></button>
+      <button class="nav-item" id="navData"><span>⇅</span><small>Data & backup</small></button>
+    </nav>
+  </div>
+
+  <dialog class="app-dialog" id="itemDialog">
+    <form id="itemForm" method="dialog">
+      <div class="dialog-header"><div><p class="eyebrow">INVENTORY ITEM</p><h2 id="formTitle">Add item</h2></div><button type="button" class="close-button" data-close="itemDialog" aria-label="Close">×</button></div>
+      <input type="hidden" id="itemId">
+      <label class="field-label">Item name<input id="itemName" name="name" required maxlength="90" placeholder="e.g. Fresh milk"></label>
+      <div class="field-row">
+        <label class="field-label">Quantity<input id="itemQuantity" name="quantity" type="number" min="0" step="any" required placeholder="0"></label>
+        <label class="field-label">Unit<select id="itemUnit" name="unit"><option>pcs</option><option>kg</option><option>g</option><option>L</option><option>ml</option><option>box</option><option>pack</option><option>bag</option><option>other</option></select></label>
+      </div>
+      <label class="field-label">Created / prepared date<input id="createdDate" name="createdDate" type="date" required></label>
+      <label class="field-label">Expiry date<input id="expiryDate" name="expiryDate" type="date" required></label>
+      <label class="field-label">Notes <span class="optional">(optional)</span><textarea id="itemNotes" name="notes" rows="2" maxlength="500" placeholder="Add a note..."></textarea></label>
+      <p class="form-error" id="formError" role="alert"></p>
+      <div class="dialog-actions"><button type="button" class="secondary-button" data-close="itemDialog">Cancel</button><button type="submit" class="primary-button">Save item</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="app-dialog compact-dialog" id="dataDialog">
+    <div class="dialog-header"><div><p class="eyebrow">YOUR DEVICE</p><h2>Data & backup</h2></div><button type="button" class="close-button" data-close="dataDialog" aria-label="Close">×</button></div>
+    <p class="dialog-description">Your inventory is stored locally on this device. Export a backup before moving to another device or importing data.</p>
+    <div class="data-actions">
+      <button class="data-action" id="exportJson"><span class="data-icon">⇧</span><span><strong>Export backup</strong><small>Download all data as a JSON file</small></span><b>›</b></button>
+      <button class="data-action" id="importJson"><span class="data-icon">⇩</span><span><strong>Import backup</strong><small>Restore or merge a previous backup</small></span><b>›</b></button>
+      <button class="data-action" id="exportPdf"><span class="data-icon">▤</span><span><strong>Export PDF</strong><small>Print or save your inventory as PDF</small></span><b>›</b></button>
+      <input type="file" id="importFile" accept=".json,application/json" hidden>
+    </div>
+    <p class="data-footnote">PDF export uses your device's print function. Choose “Save as PDF” when available.</p>
+  </dialog>
+
+  <dialog class="app-dialog compact-dialog" id="importDialog">
+    <div class="dialog-header"><div><p class="eyebrow">IMPORT BACKUP</p><h2>How should we import?</h2></div><button type="button" class="close-button" data-close="importDialog" aria-label="Close">×</button></div>
+    <p class="dialog-description" id="importSummary">Review the backup before continuing.</p>
+    <div class="import-options"><button class="secondary-button" id="mergeImport">Merge with current data</button><button class="danger-button" id="replaceImport">Replace all current data</button></div>
+    <p class="data-footnote">A merge keeps existing records and skips matching IDs. Replace permanently overwrites the current inventory on this device.</p>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
