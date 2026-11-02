@@ -109,6 +109,7 @@
       </div>
       <label class="field-label">Created / prepared date<input id="createdDate" name="createdDate" type="date" required></label>
       <label class="field-label">Expiry date<input id="expiryDate" name="expiryDate" type="date" required></label>
+      <div class="field-label photo-field"><span id="photoLabel">Photo <span class="optional">(optional)</span></span><div class="photo-picker"><div class="photo-preview" id="photoPreview"><span>▧</span></div><div class="photo-controls"><label class="secondary-button photo-choose" for="itemPhoto" id="photoChoose">Choose photo</label><button type="button" class="text-button" id="removePhoto" hidden>Remove photo</button><small id="photoHint">JPG, PNG, WebP and other image formats · Max 5 MB</small></div></div><input id="itemPhoto" type="file" accept="image/*" hidden></div>
       <label class="field-label">Notes <span class="optional">(optional)</span><textarea id="itemNotes" name="notes" rows="2" maxlength="500" placeholder="Add a note..."></textarea></label>
       <p class="form-error" id="formError" role="alert"></p>
       <div class="dialog-actions"><button type="button" class="secondary-button" data-close="itemDialog">Cancel</button><button type="submit" class="primary-button">Save item</button></div>
