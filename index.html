@@ -55,6 +55,7 @@
       </section>
 
       <section class="inventory-section">
+        <p class="section-tip" data-tip-key="inventoryTip">Use locations to separate storage places. Groups help you organize any kind of item.</p>
         <div class="storage-tabs" id="storageTabs" role="group" aria-label="Storage location"></div>
         <div class="section-heading">
           <div><p class="eyebrow">YOUR STOCK</p><h2>Inventory</h2></div>
@@ -71,7 +72,7 @@
           <button class="filter-chip" data-filter="soon">Expiring</button>
           <button class="filter-chip" data-filter="expired">Expired</button>
         </div>
-        <div class="group-tools"><div class="group-heading"><strong id="groupsTitle">Groups</strong><button type="button" id="addGroupToggle" class="group-add-toggle">+ Group</button></div><form id="newGroupForm" class="new-group-form" hidden><input id="newGroupName" maxlength="32" placeholder="New group name" required><button type="submit">Add</button></form><div class="group-chips" id="groupChips"></div></div>
+        <div class="group-tools"><p class="section-tip" data-tip-key="groupsTip">Create your own groups, such as ingredients, supplies, or products.</p><div class="group-heading"><strong id="groupsTitle">Groups</strong><button type="button" id="addGroupToggle" class="group-add-toggle">+ Group</button></div><form id="newGroupForm" class="new-group-form" hidden><input id="newGroupName" maxlength="32" placeholder="New group name" required><button type="submit">Add</button></form><div class="group-chips" id="groupChips"></div></div>
         <form class="quick-add" id="quickAddForm" hidden>
           <div class="quick-add-heading"><strong id="quickAddTitle">Quick add</strong><button type="button" class="quick-add-close" id="quickAddClose" aria-label="Close">×</button></div>
           <input id="quickName" type="text" maxlength="90" placeholder="Item name" required autocomplete="off">
@@ -106,20 +107,20 @@
     <form id="itemForm" method="dialog">
       <div class="dialog-header"><div><p class="eyebrow">INVENTORY ITEM</p><h2 id="formTitle">Add item</h2></div><button type="button" class="close-button" data-close="itemDialog" aria-label="Close">×</button></div>
       <input type="hidden" id="itemId">
-      <label class="field-label">Group<select id="itemCategory" name="category" class="category-select"></select></label>
+      <label class="field-label">Group<select id="itemCategory" name="category" class="category-select"></select><small class="field-tip" data-tip-key="groupTip">A label to help you filter similar items. You can create your own groups.</small></label>
       <div class="storage-fields">
-        <label class="storage-field" for="itemLocation"><span id="itemLocationLabel">Storage location</span><select id="itemLocation" name="storageLocation"></select></label>
-        <label class="storage-field" for="itemZone"><span id="itemZoneLabel">Shelf / area</span><select id="itemZone" name="storageZone"></select></label>
+        <label class="storage-field" for="itemLocation"><span id="itemLocationLabel">Storage location</span><select id="itemLocation" name="storageLocation"></select><small class="field-tip" data-tip-key="locationTip">Where this item is kept. Choose a storage place.</small></label>
+        <label class="storage-field" for="itemZone"><span id="itemZoneLabel">Shelf / area</span><select id="itemZone" name="storageZone"></select><small class="field-tip" data-tip-key="areaTip">The shelf, room, section, or exact spot.</small></label>
       </div>
-      <label class="field-label">Item name<input id="itemName" name="name" required maxlength="90" placeholder="e.g. Fresh milk"></label>
+      <label class="field-label">Item name<input id="itemName" name="name" required maxlength="90" placeholder="e.g. Fresh milk"><small class="field-tip" data-tip-key="nameTip">Use a clear name that you can recognize quickly.</small></label>
       <div class="field-row">
-        <label class="field-label">Quantity<input id="itemQuantity" name="quantity" type="number" min="0" step="any" required placeholder="0"></label>
-        <label class="field-label">Unit<select id="itemUnit" name="unit"><option>pcs</option><option>kg</option><option>g</option><option>L</option><option>ml</option><option>box</option><option>pack</option><option>bag</option><option>other</option></select></label>
+        <label class="field-label">Quantity<input id="itemQuantity" name="quantity" type="number" min="0" step="any" required placeholder="0"><small class="field-tip" data-tip-key="quantityTip">How much you currently have.</small></label>
+        <label class="field-label">Unit<select id="itemUnit" name="unit"><option>pcs</option><option>kg</option><option>g</option><option>L</option><option>ml</option><option>box</option><option>pack</option><option>bag</option><option>other</option></select><small class="field-tip" data-tip-key="unitTip">Choose the unit used for this quantity.</small></label>
       </div>
-      <label class="field-label">Created / prepared date<input id="createdDate" name="createdDate" type="date" required></label>
-      <label class="field-label">Expiry date<input id="expiryDate" name="expiryDate" type="date" required></label>
-      <div class="field-label photo-field"><span id="photoLabel">Photo <span class="optional">(optional)</span></span><div class="photo-picker"><div class="photo-preview" id="photoPreview"><span>▧</span></div><div class="photo-controls"><label class="secondary-button photo-choose" for="itemPhoto" id="photoChoose">Choose photo</label><button type="button" class="text-button" id="removePhoto" hidden>Remove photo</button><small id="photoHint">JPG, PNG, WebP and other image formats · Max 5 MB</small></div></div><input id="itemPhoto" type="file" accept="image/*" hidden></div>
-      <label class="field-label">Notes <span class="optional">(optional)</span><textarea id="itemNotes" name="notes" rows="2" maxlength="500" placeholder="Add a note..."></textarea></label>
+      <label class="field-label">Created / prepared date<input id="createdDate" name="createdDate" type="date" required><small class="field-tip" data-tip-key="createdTip">When it was made, prepared, received, or added.</small></label>
+      <label class="field-label">Expiry date<input id="expiryDate" name="expiryDate" type="date" required><small class="field-tip" data-tip-key="expiryTip">The last usable date. The app warns you as it gets close.</small></label>
+      <div class="field-label photo-field"><span id="photoLabel">Photo <span class="optional">(optional)</span></span><small class="field-tip" data-tip-key="photoTip">Choose a picture from your device or take one with your camera.</small><div class="photo-picker"><div class="photo-preview" id="photoPreview"><span>▧</span></div><div class="photo-controls"><label class="secondary-button photo-choose" for="itemPhoto" id="photoChoose">Choose photo</label><button type="button" class="text-button" id="removePhoto" hidden>Remove photo</button><small id="photoHint">JPG, PNG, WebP and other image formats · Max 5 MB</small></div></div><input id="itemPhoto" type="file" accept="image/*" hidden></div>
+      <label class="field-label">Notes <span class="optional">(optional)</span><textarea id="itemNotes" name="notes" rows="2" maxlength="500" placeholder="Add a note..."></textarea><small class="field-tip" data-tip-key="notesTip">Add details such as batch number, supplier, or handling instructions.</small></label>
       <p class="form-error" id="formError" role="alert"></p>
       <div class="dialog-actions"><button type="button" class="secondary-button" data-close="itemDialog">Cancel</button><button type="submit" class="primary-button">Save item</button></div>
     </form>
