@@ -23,3 +23,6 @@
 .profile-copy{flex:1;min-width:0}.profile-copy strong,.profile-copy small{display:block}.profile-copy strong{font-size:11px}.profile-copy small{font-size:9px;color:var(--muted);margin-top:4px}
 .profile-link{font-size:10px;color:var(--accent-strong);font-weight:800;text-decoration:none;white-space:nowrap}
 :root[dir="rtl"] .app-shell{text-align:right}:root[dir="rtl"] .topbar,:root[dir="rtl"] .page-heading,:root[dir="rtl"] .section-heading,:root[dir="rtl"] .dialog-header{direction:rtl}:root[dir="rtl"] .item-card{direction:rtl}:root[dir="rtl"] .item-meta{direction:rtl}:root[dir="rtl"] .field-label{text-align:right}:root[dir="rtl"] .filter-row{direction:rtl}
+
+.profile-links{display:flex;flex-direction:column;align-items:flex-end;gap:7px}.profile-link{font-size:10px;color:var(--accent-strong);font-weight:800;text-decoration:none;white-space:nowrap}
+@media(max-width:380px){.profile-card{flex-wrap:wrap}.profile-copy{min-width:calc(100% - 55px)}.profile-links{width:100%;flex-direction:row;justify-content:flex-end;gap:14px}}
