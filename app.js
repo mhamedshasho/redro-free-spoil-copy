@@ -48,6 +48,7 @@ function applyPreferences(){
  $("itemForm").querySelector('[data-close="itemDialog"]').textContent=t("cancel");
  $("itemForm").querySelector('button[type="submit"]').textContent=t("save");
  $("navData").setAttribute("aria-label",t("data"));
+ const themeOptions=$("themeSelect").options;themeOptions[0].text=t("light");themeOptions[1].text=t("dark");
  render();
 }
 function savePreferences(){localStorage.setItem(PREF_KEY,JSON.stringify({theme:$("themeSelect").value,language:$("languageSelect").value}));applyPreferences();}
