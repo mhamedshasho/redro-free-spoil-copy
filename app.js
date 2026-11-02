@@ -50,7 +50,7 @@ function applyPreferences(){
  $("quickAddTitle").textContent=currentLanguage==="ar"?"إضافة سريعة":currentLanguage==="zh"?"快速添加":currentLanguage==="ja"?"クイック追加":"Quick add";$("quickName").placeholder=currentLanguage==="ar"?"اسم المادة":currentLanguage==="zh"?"物品名称":currentLanguage==="ja"?"アイテム名":"Item name";$("quickSave").textContent=t("add"); $("#themeLabel").firstChild.textContent=t("appearance")+" ";$("#languageLabel").firstChild.textContent=t("language")+" ";const labels=document.querySelectorAll("#itemForm .field-label");
  const labelKeys=["name","quantity","unit","created","expiry","notes"];
  labels.forEach((label,i)=>{if(labelKeys[i]){const input=label.querySelector("input,select,textarea");if(input){label.firstChild.textContent=t(labelKeys[i])+" ";if(i===5){const optional=label.querySelector(".optional");if(optional)optional.textContent=t("optional");}}}});
- $("itemName").placeholder=t("placeholderName");$("itemNotes").placeholder=t("placeholderNotes");
+ $("itemName").placeholder=t("placeholderName");$("itemNotes").placeholder=t("placeholderNotes");renderCategorySelects();renderGroups();
  $("itemForm").querySelector('[data-close="itemDialog"]').textContent=t("cancel");
  $("itemForm").querySelector('button[type="submit"]').textContent=t("save");
  $("navData").setAttribute("aria-label",t("data"));
