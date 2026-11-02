@@ -83,3 +83,11 @@
 :root[data-theme="light"] .app-dialog .data-footnote{color:#718075}
 :root[data-theme="light"] .app-dialog .dialog-description{color:#65786a}
 :root[data-theme="light"] .app-dialog .profile-card{background:#f2f7f3;border-color:#dce6de}
+
+.quick-add{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px;margin:0 0 12px;display:grid;gap:10px;animation:quickIn .16s ease-out}
+.quick-add[hidden]{display:none}.quick-add-heading{display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.quick-add-close{width:29px;height:29px;border:0;border-radius:9px;background:var(--panel2);color:var(--text);font-size:20px}
+.quick-add>input,.quick-add-fields input,.quick-add-fields select{min-width:0;width:100%;height:43px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--text);padding:0 11px;font:inherit;font-size:13px}
+.quick-add-fields{display:grid;grid-template-columns:.8fr .9fr 1.4fr;gap:7px}.quick-save{width:100%;min-height:42px;padding:10px}
+@keyframes quickIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:380px){.quick-add-fields{grid-template-columns:1fr 1fr}.quick-add-fields input[type=date]{grid-column:1/-1}}
