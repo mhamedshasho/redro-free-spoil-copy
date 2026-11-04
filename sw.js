@@ -1,5 +1,5 @@
-const CACHE="redro-food-stock-v26";
-const FILES=["./","./index.html","./styles.css","./app.js","./ui.js","./manifest.webmanifest","./assets/icon.svg"];
+const CACHE="redro-food-stock-v27";
+const FILES=["./","./index.html","./styles.css","./app.js","./ui.js","./manifest.webmanifest","./assets/icon.svg","./assets/brand-icon.png","./assets/app-icon-192.png","./assets/app-icon-512.png","./assets/app-icon-maskable-512.png","./assets/apple-touch-icon.png"];
 self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)));self.skipWaiting();});
 self.addEventListener("activate",event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(key=>key.startsWith("redro-food-stock-")&&key!==CACHE).map(key=>caches.delete(key)));await self.clients.claim();})());});
 self.addEventListener("fetch",event=>{
