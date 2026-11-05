@@ -235,3 +235,39 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   #pdfExportRoot .pdf-empty{padding:20px!important;border:1px dashed #9aa99d!important}
 }
 .brand-mark{display:block;object-fit:contain;background:#fff;padding:1px;overflow:hidden;flex:0 0 auto}
+
+
+/* REDRO MOTION SYSTEM — dynamic, balanced, low-cost */
+@keyframes redroEnter{from{opacity:0;transform:translate3d(0,12px,0) scale(.985)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+@keyframes redroPop{0%{opacity:0;transform:scale(.94)}70%{transform:scale(1.015)}100%{opacity:1;transform:scale(1)}}
+@keyframes redroFade{from{opacity:0}to{opacity:1}}
+@keyframes redroSlide{from{opacity:0;transform:translate3d(16px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+:where(button,a,input,select,textarea,[role="button"]){-webkit-tap-highlight-color:transparent}
+:where(button,a,[role="button"]){transition:transform .18s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease,opacity .18s ease}
+:where(button,a,[role="button"]):active{transform:scale(.975)}
+:where(input,select,textarea){transition:border-color .18s ease,box-shadow .18s ease}
+:where(input,select,textarea):focus-visible{outline:2px solid var(--red,var(--accent,#ef3548));outline-offset:2px}
+@media(hover:hover) and (pointer:fine){
+ :where(button,a,[role="button"]):hover{filter:brightness(1.045)}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+.app-shell>.topbar{animation:redroFade .35s ease both}
+.page-heading{animation:redroEnter .42s cubic-bezier(.2,.75,.25,1) both}
+.summary-card{animation:redroEnter .38s cubic-bezier(.2,.75,.25,1) both}
+.summary-card:nth-child(2){animation-delay:45ms}.summary-card:nth-child(3){animation-delay:90ms}
+.inventory-section{animation:redroFade .35s ease .08s both}
+.item-card{animation:redroEnter .3s ease both;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.item-card:nth-child(2n){animation-delay:35ms}
+@media(hover:hover) and (pointer:fine){.item-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px #00000012;border-color:var(--accent,var(--red))}}
+.filter-chip{transition:transform .18s ease,background-color .18s ease,border-color .18s ease,color .18s ease}
+.filter-chip:active{transform:scale(.95)}
+.app-dialog[open]{animation:redroPop .24s cubic-bezier(.2,.8,.2,1) both}
+.app-dialog::backdrop{animation:redroFade .18s ease both}
+.toast.show{transition:opacity .2s ease,transform .24s cubic-bezier(.2,.8,.2,1)}
+.bottom-nav{animation:redroEnter .3s ease both}
+.nav-item.selected{transition:color .18s ease,transform .18s ease}
+.quick-add:not([hidden]){animation:redroEnter .22s ease both}
+
