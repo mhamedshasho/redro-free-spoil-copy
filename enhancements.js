@@ -7,19 +7,19 @@
   const strings = {
     ar:{
       date:"التاريخ",notifications:"الإشعارات",notificationDesc:"فعّل التنبيهات لتصلك تحذيرات المواد القريبة والمنتهية الصلاحية.",inventory:"المخزون",search:"ابحث عن مادة...",itemName:"اسم المادة",group:"المجموعة",storage:"مكان التخزين",quantity:"الكمية",unit:"الوحدة",created:"تاريخ الإنتاج / التحضير",expiry:"تاريخ الانتهاء",expiryInfo:"معلومات الصلاحية",expiryDays:"مدة الصلاحية بالأيام",photo:"الصورة",notes:"ملاحظات",other:"أخرى",close:"إغلاق",cancel:"إلغاء",save:"حفظ المادة",
-      enable:"تفعيل الإشعارات",test:"اختبار الإشعارات",enabled:"الإشعارات مفعّلة على هذا الجهاز.",disabled:"الإشعارات غير مفعّلة. افتح إعدادات التطبيق واسمح بالإشعارات.",unsupported:"ميزة الإشعارات الأصلية متاحة في نسخة Android المثبتة.",permission:"لم يتم منح إذن الإشعارات.",testTitle:"اختبار إشعارات Redro",testBody:"نجح اختبار الإشعارات والصوت.",expiredTitle:"تحذير: مادة منتهية الصلاحية",expiredBody:"انتهت صلاحية {name}. تحقق منها وأزلها من المخزون إذا لزم الأمر.",soonTitle:"مادة قاربت على انتهاء الصلاحية",soonBody:"اقترب موعد انتهاء صلاحية {name}.",removedTitle:"تمت إزالة مادة من المخزون",removedBody:"تم حذف {name} من مخزون Redro.",testDone:"تم إرسال إشعار الاختبار.",groupRename:"تعديل اسم المجموعة",groupNew:"اسم المجموعة الجديد",groupRenamed:"تم تعديل اسم المجموعة.",groupNameEmpty:"اكتب اسماً للمجموعة.",groupExists:"توجد مجموعة بهذا الاسم بالفعل.",groupRenameError:"تعذر تعديل المجموعة. حاول مجدداً.",groupDelete:"حذف المجموعة",groupEdit:"تعديل المجموعة",openSettings:"افتح إعدادات التطبيق ثم الإشعارات واسمح بها.",notificationDenied:"الإذن غير مفعّل. انتقل إلى إعدادات الإشعارات لتفعيله."
+      enable:"تفعيل الإشعارات",test:"اختبار الإشعارات",enabled:"الإشعارات مفعّلة على هذا الجهاز.",disabled:"الإشعارات غير مفعّلة. افتح إعدادات التطبيق واسمح بالإشعارات.",unsupported:"ميزة الإشعارات الأصلية متاحة في نسخة Android المثبتة.",permission:"لم يتم منح إذن الإشعارات.",testTitle:"اختبار إشعارات Redro",testBody:"نجح اختبار الإشعارات والصوت.",threeDaysTitle:"تذكير بانتهاء الصلاحية",threeDaysBody:"بقي 3 أيام على انتهاء صلاحية {name}.",twoDaysTitle:"تذكير بانتهاء الصلاحية",twoDaysBody:"بقي يومان على انتهاء صلاحية {name}.",expiredTitle:"تحذير: منتج منتهي الصلاحية",expiredBody:"انتهت صلاحية {name}.",testDone:"تم إرسال إشعار الاختبار.",groupRename:"تعديل اسم المجموعة",groupNew:"اسم المجموعة الجديد",groupRenamed:"تم تعديل اسم المجموعة.",groupNameEmpty:"اكتب اسماً للمجموعة.",groupExists:"توجد مجموعة بهذا الاسم بالفعل.",groupRenameError:"تعذر تعديل المجموعة. حاول مجدداً.",groupDelete:"حذف المجموعة",groupEdit:"تعديل المجموعة",openSettings:"افتح إعدادات التطبيق ثم الإشعارات واسمح بها.",notificationDenied:"الإذن غير مفعّل. انتقل إلى إعدادات الإشعارات لتفعيله."
     },
     en:{
       date:"Date",notifications:"Notifications",notificationDesc:"Enable alerts for items that are nearing or past their expiry date.",inventory:"Inventory",search:"Search items...",itemName:"Item name",group:"Group",storage:"Storage location",quantity:"Quantity",unit:"Unit",created:"Production / prepared date",expiry:"Expiry date",expiryInfo:"Expiry information",expiryDays:"Shelf life in days",photo:"Photo",notes:"Notes",other:"Other",close:"Close",cancel:"Cancel",save:"Save item",
-      enable:"Enable notifications",test:"Test notifications",enabled:"Notifications are enabled on this device.",disabled:"Notifications are disabled. Open app settings and allow notifications.",unsupported:"Native notifications are available in the installed Android app.",permission:"Notification permission was not granted.",testTitle:"Redro notification test",testBody:"Notification and sound test successful.",expiredTitle:"Expired item warning",expiredBody:"{name} has expired. Check it and remove it from stock if needed.",soonTitle:"Item expiring soon",soonBody:"{name} is approaching its expiry date.",removedTitle:"Item removed from inventory",removedBody:"{name} was removed from Redro inventory.",testDone:"Test notification sent.",groupRename:"Rename group",groupNew:"New group name",groupRenamed:"Group name updated.",groupNameEmpty:"Enter a group name.",groupExists:"A group with this name already exists.",groupRenameError:"Could not rename the group. Try again.",groupDelete:"Delete group",groupEdit:"Edit group",openSettings:"Open app settings, then Notifications, and allow notifications.",notificationDenied:"Permission is disabled. Open notification settings to enable it."
+      enable:"Enable notifications",test:"Test notifications",enabled:"Notifications are enabled on this device.",disabled:"Notifications are disabled. Open app settings and allow notifications.",unsupported:"Native notifications are available in the installed Android app.",permission:"Notification permission was not granted.",testTitle:"Redro notification test",testBody:"Notification and sound test successful.",threeDaysTitle:"Expiry reminder",threeDaysBody:"{name} expires in 3 days.",twoDaysTitle:"Expiry reminder",twoDaysBody:"{name} expires in 2 days.",expiredTitle:"Expired item warning",expiredBody:"{name} has expired.",testDone:"Test notification sent.",groupRename:"Rename group",groupNew:"New group name",groupRenamed:"Group name updated.",groupNameEmpty:"Enter a group name.",groupExists:"A group with this name already exists.",groupRenameError:"Could not rename the group. Try again.",groupDelete:"Delete group",groupEdit:"Edit group",openSettings:"Open app settings, then Notifications, and allow notifications.",notificationDenied:"Permission is disabled. Open notification settings to enable it."
     },
     zh:{
       date:"日期",notifications:"通知",notificationDesc:"启用即将到期和已过期物品提醒。",inventory:"库存",search:"搜索物品...",itemName:"物品名称",group:"分组",storage:"存放位置",quantity:"数量",unit:"单位",created:"生产 / 制备日期",expiry:"到期日期",expiryInfo:"有效期信息",expiryDays:"保质期（天）",photo:"照片",notes:"备注",other:"其他",close:"关闭",cancel:"取消",save:"保存物品",
-      enable:"启用通知",test:"测试通知",enabled:"此设备已启用通知。",disabled:"通知未启用。请在应用设置中允许通知。",unsupported:"原生通知功能可在已安装的 Android 应用中使用。",permission:"未获得通知权限。",testTitle:"Redro 通知测试",testBody:"通知和声音测试成功。",expiredTitle:"物品已过期",expiredBody:"{name} 已过期，请检查并按需从库存中移除。",soonTitle:"物品即将到期",soonBody:"{name} 即将到期。",removedTitle:"物品已从库存移除",removedBody:"{name} 已从 Redro 库存中删除。",testDone:"测试通知已发送。",groupRename:"重命名分组",groupNew:"新的分组名称",groupRenamed:"分组名称已更新。",groupNameEmpty:"请输入分组名称。",groupExists:"此分组名称已存在。",groupRenameError:"无法重命名分组，请重试。",groupDelete:"删除分组",groupEdit:"编辑分组",openSettings:"打开应用设置，然后进入通知并允许通知。",notificationDenied:"权限未启用。请打开通知设置。"
+      enable:"启用通知",test:"测试通知",enabled:"此设备已启用通知。",disabled:"通知未启用。请在应用设置中允许通知。",unsupported:"原生通知功能可在已安装的 Android 应用中使用。",permission:"未获得通知权限。",testTitle:"Redro 通知测试",testBody:"通知和声音测试成功。",threeDaysTitle:"到期提醒",threeDaysBody:"{name} 将在3天后到期。",twoDaysTitle:"到期提醒",twoDaysBody:"{name} 将在2天后到期。",expiredTitle:"物品已过期",expiredBody:"{name} 已过期。",testDone:"测试通知已发送。",groupRename:"重命名分组",groupNew:"新的分组名称",groupRenamed:"分组名称已更新。",groupNameEmpty:"请输入分组名称。",groupExists:"此分组名称已存在。",groupRenameError:"无法重命名分组，请重试。",groupDelete:"删除分组",groupEdit:"编辑分组",openSettings:"打开应用设置，然后进入通知并允许通知。",notificationDenied:"权限未启用。请打开通知设置。"
     },
     ja:{
       date:"日付",notifications:"通知",notificationDesc:"期限が近い商品や期限切れの商品を通知します。",inventory:"在庫",search:"アイテムを検索...",itemName:"アイテム名",group:"グループ",storage:"保存場所",quantity:"数量",unit:"単位",created:"製造 / 準備日",expiry:"期限日",expiryInfo:"期限情報",expiryDays:"保存期間（日）",photo:"写真",notes:"メモ",other:"その他",close:"閉じる",cancel:"キャンセル",save:"保存",
-      enable:"通知を有効にする",test:"通知をテスト",enabled:"この端末では通知が有効です。",disabled:"通知は無効です。アプリ設定で通知を許可してください。",unsupported:"ネイティブ通知はインストール済みAndroidアプリで利用できます。",permission:"通知の許可がありません。",testTitle:"Redro通知テスト",testBody:"通知とサウンドのテストに成功しました。",expiredTitle:"期限切れ商品の警告",expiredBody:"{name} の期限が切れました。確認して必要に応じて在庫から削除してください。",soonTitle:"期限が近い商品",soonBody:"{name} の期限が近づいています。",removedTitle:"商品を在庫から削除しました",removedBody:"{name} はRedroの在庫から削除されました。",testDone:"テスト通知を送信しました。",groupRename:"グループ名を変更",groupNew:"新しいグループ名",groupRenamed:"グループ名を更新しました。",groupNameEmpty:"グループ名を入力してください。",groupExists:"同じ名前のグループがあります。",groupRenameError:"グループ名を変更できませんでした。",groupDelete:"グループを削除",groupEdit:"グループを編集",openSettings:"アプリ設定を開き、通知を許可してください。",notificationDenied:"権限が無効です。通知設定を開いてください。"
+      enable:"通知を有効にする",test:"通知をテスト",enabled:"この端末では通知が有効です。",disabled:"通知は無効です。アプリ設定で通知を許可してください。",unsupported:"ネイティブ通知はインストール済みAndroidアプリで利用できます。",permission:"通知の許可がありません。",testTitle:"Redro通知テスト",testBody:"通知とサウンドのテストに成功しました。",threeDaysTitle:"期限のお知らせ",threeDaysBody:"{name} は3日後に期限切れになります。",twoDaysTitle:"期限のお知らせ",twoDaysBody:"{name} は2日後に期限切れになります。",expiredTitle:"期限切れ商品の警告",expiredBody:"{name} の期限が切れました。",testDone:"テスト通知を送信しました。",groupRename:"グループ名を変更",groupNew:"新しいグループ名",groupRenamed:"グループ名を更新しました。",groupNameEmpty:"グループ名を入力してください。",groupExists:"同じ名前のグループがあります。",groupRenameError:"グループ名を変更できませんでした。",groupDelete:"グループを削除",groupEdit:"グループを編集",openSettings:"アプリ設定を開き、通知を許可してください。",notificationDenied:"権限が無効です。通知設定を開いてください。"
     }
   };
   const t = key => (strings[lang()] || strings.ar)[key] || strings.ar[key] || key;
@@ -250,21 +250,6 @@
     }
     if (scheduleSucceeded) savePlan(nextPlan);
   }
-  async function sendRemovalNotice(name) {
-    const plugin = native();
-    if (!plugin || !(await permissionState(plugin))) return;
-    try {
-      await plugin.schedule({notifications:[{
-        id:hash("removed-" + Date.now() + "-" + name),
-        title:t("removedTitle"),
-        body:fill(t("removedBody"),name),
-        schedule:{at:new Date(Date.now()+800)},
-        channelId:"redro-expiry-alarm-v2",
-        sound:"default",
-        smallIcon:"ic_stat_icon_config_sample"
-      }]});
-    } catch (error) { console.warn("Redro removal notification failed.", error); }
-  }
   async function renameGroup(oldName) {
     const nextName = prompt(t("groupRename"),oldName);
     if (nextName === null) return;
@@ -312,12 +297,6 @@
     container.querySelectorAll("[data-edit-group]").forEach(button=>{
       button.addEventListener("click",event=>{event.stopPropagation();renameGroup(button.dataset.editGroup);});
     });
-  };
-  const originalDeleteItem = deleteItem;
-  deleteItem = async function deleteItemWithNotification(id) {
-    const item = items.find(entry=>entry.id===id);
-    await originalDeleteItem(id);
-    if (item && !items.some(entry=>entry.id===id)) await sendRemovalNotice(item.name);
   };
   const originalRefresh = refresh;
   refresh = async function refreshAndScheduleNotifications() {
