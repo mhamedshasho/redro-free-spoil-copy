@@ -62,7 +62,7 @@
     const now = Date.now();
     const date = new Date(item.expiryDate + "T09:00:00");
     if (!Number.isFinite(date.getTime())) return [];
-    if (date.getTime() <= now) return [now + 15000, now + 30 * 60000, now + 2 * 60 * 60000, now + 3 * 60000];
+    if (date.getTime() <= now) return [now + 15000, now + 30 * 60000, now + 2 * 60 * 60000];
     const reminder = date.getTime() - 24 * 60 * 60000;
     return [reminder > now ? reminder : date.getTime(), date.getTime(), date.getTime() + 6 * 60 * 60000, date.getTime() + 24 * 60 * 60000];
   }
