@@ -48,6 +48,11 @@ jobs:
         run: npx cap add android
       - name: Sync native plugins
         run: npx cap sync android
+      - name: Add native notification settings bridge
+        run: |
+          mkdir -p android/app/src/main/java/com/redro/spoilfreecopy
+          cp android-native/NotificationSettingsPlugin.java android/app/src/main/java/com/redro/spoilfreecopy/NotificationSettingsPlugin.java
+          cp android-native/MainActivity.java android/app/src/main/java/com/redro/spoilfreecopy/MainActivity.java
       - name: Set Android 7 minimum API
         run: |
           sed -i 's/minSdkVersion = 23/minSdkVersion = 24/' android/variables.gradle
