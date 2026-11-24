@@ -1,0 +1,11 @@
+{
+  "appId": "com.redro.foodstock",
+  "appName": "Redro Food Stock",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
