@@ -66,6 +66,9 @@
           <input id="searchInput" type="search" placeholder="ابحث عن مادة..." autocomplete="off">
           
         </label>
+        <div class="inventory-tools">
+          <label class="sort-control" for="inventorySort"><span>ترتيب حسب</span><select id="inventorySort"><option value="expiry-asc">الأقرب انتهاءً</option><option value="expiry-desc">الأبعد انتهاءً</option><option value="name-asc">الاسم: أ إلى ي</option><option value="name-desc">الاسم: ي إلى أ</option><option value="quantity-desc">الكمية: الأعلى</option><option value="quantity-asc">الكمية: الأقل</option><option value="updated-desc">آخر تعديل</option></select></label>
+        </div>
         <div class="filter-row" role="group" aria-label="Filter inventory">
           <button class="filter-chip active" data-filter="all">الكل <span id="filterAll">0</span></button>
           <button class="filter-chip" data-filter="fresh">صالحة</button>
