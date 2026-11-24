@@ -98,18 +98,29 @@
     try { await plugin.cancel({notifications:ids.map(id=>({id}))}); } catch (error) { console.warn("Redro notification cancellation failed.", error); }
   }
   async function createChannel(plugin) {
-    if (!plugin.createChannel) return;
-    try {
-      await plugin.createChannel({
-        id:"redro-expiry-alerts",
-        name:lang()==="ar"?"تنبيهات صلاحية المواد":"Expiry alerts",
-        description:lang()==="ar"?"تنبيهات المواد القريبة والمنتهية الصلاحية":"Expiry and stock alerts",
-        importance:5,
-        sound:"default",
-        vibration:true,
-        visibility:1
-      });
-    } catch (error) { console.warn("Redro notification channel setup failed.", error); }
+    const settings = SETTINGS_PLUGIN();
+    if (settings && typeof settings.ensureAlarmChannel === "function") {
+      try {
+        const result = await settings.ensureAlarmChannel();
+        if (result?.channelId) return result.channelId;
+      } catch (error) {
+        console.warn("Redro native alarm channel setup failed.", error);
+      }
+    }
+    if (plugin.createChannel) {
+      try {
+        await plugin.createChannel({
+          id:"redro-expiry-alarm-v2",
+          name:lang()==="ar"?"تنبيهات صلاحية المواد":"Expiry alerts",
+          description:lang()==="ar"?"تنبيهات المواد القريبة والمنتهية الصلاحية":"Expiry and stock alerts",
+          importance:5,
+          sound:"default",
+          vibration:true,
+          visibility:1
+        });
+      } catch (error) { console.warn("Redro notification channel setup failed.", error); }
+    }
+    return "redro-expiry-alarm-v2";
   }
   async function permissionState(plugin) {
     try {
@@ -182,7 +193,7 @@
         title:t("testTitle"),
         body:t("testBody"),
         schedule:{at:new Date(Date.now()+1200)},
-        channelId:"redro-expiry-alerts",
+        channelId:"redro-expiry-alarm-v2",
         sound:"default",
         smallIcon:"ic_stat_icon_config_sample"
       }]});
@@ -218,7 +229,7 @@
           title:isReminder?t("soonTitle"):t("expiredTitle"),
           body:isReminder?fill(t("soonBody"),item.name):fill(t("expiredBody"),item.name),
           schedule:{at:new Date(time)},
-          channelId:"redro-expiry-alerts",
+          channelId:"redro-expiry-alarm-v2",
           sound:"default",
           smallIcon:"ic_stat_icon_config_sample",
           extra:{itemId:item.id,expiryDate:item.expiryDate}
@@ -247,7 +258,7 @@
         title:t("removedTitle"),
         body:fill(t("removedBody"),name),
         schedule:{at:new Date(Date.now()+800)},
-        channelId:"redro-expiry-alerts",
+        channelId:"redro-expiry-alarm-v2",
         sound:"default",
         smallIcon:"ic_stat_icon_config_sample"
       }]});
