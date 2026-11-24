@@ -53,7 +53,8 @@
     [t("itemName"),t("group"),t("storage"),t("quantity"),t("unit"),t("created"),t("expiryInfo")].forEach((value,index)=>{if(quickLabels[index])quickLabels[index].textContent=value;});
     const quickExpiryDate = $("quickExpiryDateWrap")?.querySelector("span"); if(quickExpiryDate)quickExpiryDate.textContent=t("expiry");
     const quickExpiryDuration = $("quickExpiryDuration")?.closest("label")?.querySelector("span"); if(quickExpiryDuration)quickExpiryDuration.textContent=t("expiryDays");
-    setLabelText("itemName","itemName"); setLabelText("itemCategory","group"); setLabelText("itemQuantity","quantity"); setLabelText("itemUnit","unit"); setLabelText("createdDate","created"); setLabelText("expiryDate","expiry"); setLabelText("itemNotes","notes");
+    setLabelText("itemName","itemName"); setLabelText("itemCategory","group"); setLabelText("itemQuantity","quantity"); setLabelText("itemUnit","unit"); setLabelText("createdDate","created"); setLabelText("itemNotes","notes");
+    const fullExpiryDate = $("expiryDateWrap")?.querySelector("span"); if(fullExpiryDate)fullExpiryDate.textContent=t("expiry");
     const expiryInfo = $("expiryMode")?.closest(".expiry-entry")?.querySelector(":scope > span"); if(expiryInfo)expiryInfo.textContent=t("expiryInfo");
     const unitSelects = [$("itemUnit"),$("quickUnit")]; unitSelects.forEach(select=>{const option=[...select.options].find(item=>item.value==="other"||item.text==="other");if(option)option.text=t("other");});
     const navInventory = document.querySelector(".bottom-nav .nav-item[href] small"); if(navInventory)navInventory.textContent=t("inventory");
@@ -103,7 +104,12 @@
   async function permissionState(plugin) {
     try {
       const result = await plugin.checkPermissions();
-      return result.display === "granted";
+      if (result.display !== "granted") return false;
+      if (typeof plugin.areEnabled === "function") {
+        const enabled = await plugin.areEnabled();
+        if (enabled && enabled.value === false) return false;
+      }
+      return true;
     } catch { return false; }
   }
   async function refreshPermissionStatus() {
@@ -192,6 +198,7 @@
       ids.forEach(id=>validIds.add(id));
       nextPlan[key] = signature;
       if (oldPlan[key] === signature) continue;
+      if (oldPlan[key]) await cancelIds(plugin, notificationIds({id:item.id,expiryDate:oldPlan[key]}));
       await cancelIds(plugin, ids);
       const times = expiryTimes(item);
       times.forEach((time,index)=>{
@@ -214,11 +221,12 @@
         await cancelIds(plugin, notificationIds(oldItem));
       }
     }
+    let scheduleSucceeded = true;
     if (schedules.length) {
       try { await plugin.schedule({notifications:schedules}); }
-      catch (error) { console.error("Redro expiry notifications could not be scheduled.", error); }
+      catch (error) { scheduleSucceeded = false; console.error("Redro expiry notifications could not be scheduled.", error); }
     }
-    savePlan(nextPlan);
+    if (scheduleSucceeded) savePlan(nextPlan);
   }
   async function sendRemovalNotice(name) {
     const plugin = native();
