@@ -11,6 +11,8 @@ on:
       - "app.js"
       - "ui.js"
       - "expiry-entry.js"
+      - "runtime-services.js"
+      - "sw.js"
       - "styles.css"
       - "assets/**"
       - "package.json"
