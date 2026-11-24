@@ -75,24 +75,26 @@
   }
   function notificationIds(item) {
     const base = hash(item.id + "|" + item.expiryDate);
-    return [base, base + 1, base + 2, base + 3];
+    return [base, base + 1, base + 2];
   }
-  function expiryMoment(item) {
+  function expiryDateAt(item, hour=9) {
     const date = new Date(item.expiryDate + "T00:00:00");
-    return Number.isFinite(date.getTime()) ? date.getTime() + 24 * 60 * 60000 + 5 * 60000 : NaN;
-  }
-  function expiryReminder(item) {
-    const date = new Date(item.expiryDate + "T09:00:00");
-    date.setDate(date.getDate() - 1);
+    if (!Number.isFinite(date.getTime())) return NaN;
+    date.setHours(hour,0,0,0);
     return date.getTime();
   }
   function expiryTimes(item) {
     const now = Date.now();
-    const expiresAt = expiryMoment(item);
-    if (!Number.isFinite(expiresAt)) return [];
-    if (expiresAt <= now) return [now + 15000, now + 30 * 60000, now + 2 * 60 * 60000];
-    const reminder = expiryReminder(item);
-    return reminder > now ? [reminder, expiresAt, expiresAt + 6 * 60 * 60000, expiresAt + 24 * 60 * 60000] : [expiresAt, expiresAt + 6 * 60 * 60000, expiresAt + 24 * 60 * 60000];
+    const expiryAt = expiryDateAt(item,9);
+    if (!Number.isFinite(expiryAt)) return [];
+    const reminders = [
+      {days:3,id:0,title:t("threeDaysTitle"),body:fill(t("threeDaysBody"),item.name)},
+      {days:2,id:1,title:t("twoDaysTitle"),body:fill(t("twoDaysBody"),item.name)}
+    ];
+    const scheduled = reminders.map(entry=>({...entry,at:expiryAt-entry.days*86400000})).filter(entry=>entry.at>now).map(entry=>({id:entry.id,at:entry.at,title:entry.title,body:entry.body}));
+    if (expiryAt>now) scheduled.push({id:2,at:expiryAt,title:t("expiredTitle"),body:fill(t("expiredBody"),item.name)});
+    else if (new Date(item.expiryDate+"T00:00:00").toDateString()===new Date(now).toDateString()) scheduled.push({id:2,at:now+5000,title:t("expiredTitle"),body:fill(t("expiredBody"),item.name)});
+    return scheduled;
   }
   async function cancelIds(plugin, ids) {
     try { await plugin.cancel({notifications:ids.map(id=>({id}))}); } catch (error) { console.warn("Redro notification cancellation failed.", error); }
@@ -214,7 +216,7 @@
     for (const item of items) {
       if (!item?.id || !item?.expiryDate) continue;
       const key = String(item.id);
-      const signature = String(item.expiryDate);
+      const signature = String(item.expiryDate) + "|" + String(item.name || "");
       const ids = notificationIds(item);
       ids.forEach(id=>validIds.add(id));
       nextPlan[key] = signature;
@@ -222,13 +224,12 @@
       if (oldPlan[key]) await cancelIds(plugin, notificationIds({id:item.id,expiryDate:oldPlan[key]}));
       await cancelIds(plugin, ids);
       const times = expiryTimes(item);
-      times.forEach((time,index)=>{
-        const isReminder = index === 0 && expiryReminder(item) > Date.now() && expiryReminder(item) < expiryMoment(item);
+      times.forEach(entry=>{
         schedules.push({
-          id:ids[index],
-          title:isReminder?t("soonTitle"):t("expiredTitle"),
-          body:isReminder?fill(t("soonBody"),item.name):fill(t("expiredBody"),item.name),
-          schedule:{at:new Date(time)},
+          id:ids[entry.id],
+          title:entry.title,
+          body:entry.body,
+          schedule:{at:new Date(entry.at)},
           channelId:"redro-expiry-alarm-v2",
           sound:"default",
           smallIcon:"ic_stat_icon_config_sample",
