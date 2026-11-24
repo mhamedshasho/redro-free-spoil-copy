@@ -154,7 +154,18 @@ render = function renderLocationAwareInventory() {
     return (activeFilter === "all" || status === activeFilter)
       && (activeGroup === "all" || (item.category || "Other") === activeGroup)
       && (!query || searchable.includes(query));
-  }).sort((a, b) => a.expiryDate.localeCompare(b.expiryDate));
+  }).sort((a, b) => {
+    const mode = $("inventorySort")?.value || "expiry-asc";
+    const nameA = String(a.name || "").toLocaleLowerCase();
+    const nameB = String(b.name || "").toLocaleLowerCase();
+    if (mode === "expiry-desc") return String(b.expiryDate || "").localeCompare(String(a.expiryDate || ""));
+    if (mode === "name-asc") return nameA.localeCompare(nameB, currentLanguage);
+    if (mode === "name-desc") return nameB.localeCompare(nameA, currentLanguage);
+    if (mode === "quantity-desc") return Number(b.quantity || 0) - Number(a.quantity || 0);
+    if (mode === "quantity-asc") return Number(a.quantity || 0) - Number(b.quantity || 0);
+    if (mode === "updated-desc") return String(b.updatedAt || "").localeCompare(String(a.updatedAt || ""));
+    return String(a.expiryDate || "").localeCompare(String(b.expiryDate || ""));
+  });
 
   $("totalCount").textContent = items.length;
   $("soonCount").textContent = items.filter(item => statusOf(item).key === "soon").length;
@@ -318,6 +329,7 @@ bind = function bindLocationAwareUI() {
   $("quickLocation").addEventListener("change", () => renderStorageSelects($("quickLocation").value));
   $("restockToggle").addEventListener("click", () => { renderRestockList(); $("restockDialog").showModal(); });
   $("copyRestock").addEventListener("click", copyRestockList);
+  $("inventorySort")?.addEventListener("change", () => render());
 };
 
 
