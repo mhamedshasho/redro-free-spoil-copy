@@ -1,7 +1,7 @@
 {
   "id": "https://mhamedshasho.github.io/redro-free-spoil-copy/",
-  "name": "Redro Food Stock",
-  "short_name": "Food Stock",
+  "name": "Redro Spoil Free Copy",
+  "short_name": "Spoil Free Copy",
   "description": "Food stock and expiry tracker",
   "start_url": "https://mhamedshasho.github.io/redro-free-spoil-copy/",
   "scope": "https://mhamedshasho.github.io/redro-free-spoil-copy/",
@@ -10,8 +10,8 @@
     "standalone",
     "minimal-ui"
   ],
-  "background_color": "#f5f8f5",
-  "theme_color": "#23864b",
+  "background_color": "#f3f6f2",
+  "theme_color": "#197448",
   "icons": [
     {
       "src": "https://mhamedshasho.github.io/redro-free-spoil-copy/assets/app-icon-192.png",
