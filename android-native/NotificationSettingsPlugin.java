@@ -1,6 +1,11 @@
 package com.redro.spoilfreecopy;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -13,6 +18,43 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 
 @CapacitorPlugin(name = "NotificationSettings")
 public class NotificationSettingsPlugin extends Plugin {
+    private static final String ALARM_CHANNEL_ID = "redro-expiry-alarm-v2";
+
+    @PluginMethod
+    public void ensureAlarmChannel(PluginCall call) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationManager manager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationChannel existing = manager.getNotificationChannel(ALARM_CHANNEL_ID);
+                if (existing == null) {
+                    NotificationChannel channel = new NotificationChannel(
+                        ALARM_CHANNEL_ID,
+                        "Redro expiry alarms",
+                        NotificationManager.IMPORTANCE_HIGH
+                    );
+                    channel.setDescription("Audible expiry and inventory alerts");
+                    channel.enableVibration(true);
+                    channel.setVibrationPattern(new long[]{0, 700, 250, 700, 250, 1000});
+                    channel.setLockscreenVisibility(android.app.Notification.VISIBILITY_PUBLIC);
+                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+                    if (alarmSound == null) alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    AudioAttributes attributes = new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build();
+                    channel.setSound(alarmSound, attributes);
+                    manager.createNotificationChannel(channel);
+                }
+            }
+            JSObject result = new JSObject();
+            result.put("channelId", ALARM_CHANNEL_ID);
+            result.put("importance", "high");
+            call.resolve(result);
+        } catch (Exception error) {
+            call.reject("Unable to create the Redro alarm notification channel", error);
+        }
+    }
+
     @PluginMethod
     public void open(PluginCall call) {
         try {
