@@ -221,7 +221,7 @@
       ids.forEach(id=>validIds.add(id));
       nextPlan[key] = signature;
       if (oldPlan[key] === signature) continue;
-      if (oldPlan[key]) await cancelIds(plugin, notificationIds({id:item.id,expiryDate:oldPlan[key]}));
+      if (oldPlan[key]) await cancelIds(plugin, notificationIds({id:item.id,expiryDate:String(oldPlan[key]).split("|")[0]}));
       await cancelIds(plugin, ids);
       const times = expiryTimes(item);
       times.forEach(entry=>{
@@ -239,7 +239,7 @@
     }
     for (const oldId of Object.keys(oldPlan)) {
       if (!(oldId in nextPlan)) {
-        const oldItem = {id:oldId,expiryDate:oldPlan[oldId]};
+        const oldItem = {id:oldId,expiryDate:String(oldPlan[oldId]).split("|")[0]};
         await cancelIds(plugin, notificationIds(oldItem));
       }
     }
