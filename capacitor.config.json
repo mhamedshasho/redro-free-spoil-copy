@@ -1,6 +1,6 @@
 {
-  "appId": "com.redro.foodstock",
-  "appName": "Redro Food Stock",
+  "appId": "com.redro.spoilfreecopy",
+  "appName": "Redro Spoil Free Copy",
   "webDir": "www",
   "server": {
     "androidScheme": "https"
