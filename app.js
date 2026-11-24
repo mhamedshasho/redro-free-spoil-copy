@@ -93,7 +93,7 @@ function t(key){return extraTranslations[currentLanguage]?.[key]||(translations[
 let currentLanguage="en";
 function applyPreferences(){
  let prefs;try{prefs=JSON.parse(localStorage.getItem(PREF_KEY)||"{}");if(!prefs||typeof prefs!=="object"||Array.isArray(prefs))prefs={};}catch(error){console.warn("Redro preferences could not be read; using defaults.",error);prefs={};}
- currentLanguage=["en","ar","zh","ja"].includes(prefs.language)?prefs.language:"en";
+ currentLanguage=["en","ar","zh","ja"].includes(prefs.language)?prefs.language:"ar";
  const theme=prefs.theme==="dark"?"dark":"light";
  document.documentElement.dataset.theme=theme;
  document.documentElement.lang=currentLanguage;
