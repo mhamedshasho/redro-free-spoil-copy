@@ -75,7 +75,7 @@
         : payload.utc_datetime
           ? Date.parse(payload.utc_datetime)
           : NaN;
-    if (!Number.isFinite(candidate) || candidate < 1577836800000 || candidate > Date.now() + 86400000) {
+    if (!Number.isFinite(candidate) || candidate < 1577836800000 || candidate > 4102444800000) {
       throw new Error("Invalid time API response");
     }
     return candidate;
@@ -89,6 +89,9 @@
         const serverEpoch = parseTime(payload);
         persistAnchor({ serverEpoch, localEpoch: Date.now(), syncedAt: new Date().toISOString() });
         updateClockStatus();
+        const label = document.getElementById("todayLabel");
+        if (label) label.textContent = dateLabel();
+        window.dispatchEvent(new Event("redro-time-updated"));
         return true;
       } catch (error) {
         console.warn("Redro time sync failed:", endpoint, error);
@@ -133,6 +136,7 @@
         headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=31536000" }
       }));
     }
+    window.dispatchEvent(new Event("redro-resources-updated"));
   }
 
   function iconFor(category) {
@@ -252,7 +256,8 @@
         : t("statusMissing");
     const button = document.getElementById("redro-resource-download");
     button.textContent = t("button");
-    document.getElementById("redro-clock-status").textContent = anchor ? t("cached") : t("local");
+    const fresh = anchor?.syncedAt && Date.now() - Date.parse(anchor.syncedAt) < 6 * 60 * 60 * 1000;
+    document.getElementById("redro-clock-status").textContent = fresh ? t("synced") : anchor ? t("cached") : t("local");
   }
 
   async function downloadPack(manual = false) {
