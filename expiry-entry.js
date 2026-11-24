@@ -6,7 +6,7 @@
     zh: {mode:"有效期输入方式",dateMode:"选择到期日期",durationMode:"输入保质期",expiry:"到期日期",days:"保质期（天）",dateHint:"直接选择到期日期。",durationHint:"应用会根据生产日期计算到期日期。",quickHint:"计算的到期日期："},
     ja: {mode:"期限の入力方法",dateMode:"期限日を選択",durationMode:"保存期間を入力",expiry:"期限日",days:"保存期間（日）",dateHint:"期限日を直接選択します。",durationHint:"製造日から期限日を自動計算します。",quickHint:"計算された期限日："}
   };
-  const language = () => translations[window.currentLanguage] ? window.currentLanguage : (document.documentElement.lang || "en");
+  const language = () => translations[currentLanguage] ? currentLanguage : (document.documentElement.lang || "en");
   const text = () => translations[language()] || translations.en;
   const addDays = (dateValue, daysValue) => {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dateValue || "")) return "";
@@ -106,33 +106,33 @@
       return;
     }
     if (expiryDate < createdDate) {
-      $("formError").textContent = window.t("dateError");
+      $("formError").textContent = t("dateError");
       return;
     }
-    const id = $("itemId").value || window.makeId();
+    const id = $("itemId").value || makeId();
     const submit = $("itemForm").querySelector('button[type="submit"]');
     const expectedUpdatedAt = $("itemId").dataset.expectedUpdatedAt || "";
     submit.disabled = true;
     try {
       const selectedPhoto = $("itemPhoto").files[0];
-      const image = selectedPhoto ? await window.readImageFile(selectedPhoto) : $("itemPhoto").dataset.existing || "";
+      const image = selectedPhoto ? await readImageFile(selectedPhoto) : $("itemPhoto").dataset.existing || "";
       const record = {id,name,quantity,unit:$("itemUnit").value,category:$("itemCategory").value || "Other",storageLocation:$("itemLocation").value,storageZone:$("itemZone").value,createdDate,expiryDate,notes:$("itemNotes").value.trim(),image,updatedAt:new Date().toISOString()};
-      if ($("itemId").value) await window.persistUpdatedRecord(record, expectedUpdatedAt);
-      else await window.persistNewRecord(record);
-      window.activeLocation = record.storageLocation;
-      window.persistActiveLocation?.();
-      window.announceInventoryChange?.();
-      await window.refresh();
-      window.activeFilter = "all";
-      window.activeGroup = "all";
+      if ($("itemId").value) await persistUpdatedRecord(record, expectedUpdatedAt);
+      else await persistNewRecord(record);
+      activeLocation = record.storageLocation;
+      persistActiveLocation();
+      announceInventoryChange();
+      await refresh();
+      activeFilter = "all";
+      activeGroup = "all";
       $("searchInput").value = "";
       $("itemDialog").close();
-      window.render();
-      window.renderGroups();
-      window.showToast(window.t("saved"));
+      render();
+      renderGroups();
+      showToast(t("saved"));
     } catch (error) {
       console.error("Redro item save failed:", error);
-      $("formError").textContent = error.message === window.t("recordChanged") || error.message === window.t("recordRemoved") ? error.message : window.t("dbError") + " (" + (error?.name || "Error") + ")";
+      $("formError").textContent = error.message === t("recordChanged") || error.message === t("recordRemoved") ? error.message : t("dbError") + " (" + (error?.name || "Error") + ")";
     } finally {
       submit.disabled = false;
     }
@@ -151,29 +151,29 @@
       return;
     }
     if (expiryDate < createdDate) {
-      window.showToast(window.t("dateError"));
+      showToast(t("dateError"));
       return;
     }
     const location = $("quickLocation").value;
-    const record = {id:window.makeId(),name,quantity,unit:$("quickUnit").value,category:$("quickCategory").value || "Other",storageLocation:location,storageZone:window.zonesFor(location)[0],createdDate,expiryDate,notes:"",updatedAt:new Date().toISOString()};
+    const record = {id:makeId(),name,quantity,unit:$("quickUnit").value,category:$("quickCategory").value || "Other",storageLocation:location,storageZone:zonesFor(location)[0],createdDate,expiryDate,notes:"",updatedAt:new Date().toISOString()};
     const button = $("quickSave");
     button.disabled = true;
     try {
-      await window.persistNewRecord(record);
-      window.activeLocation = location;
-      window.persistActiveLocation?.();
-      window.announceInventoryChange?.();
-      await window.refresh();
-      window.closeQuickAdd();
-      window.activeFilter = "all";
-      window.activeGroup = "all";
+      await persistNewRecord(record);
+      activeLocation = location;
+      persistActiveLocation();
+      announceInventoryChange();
+      await refresh();
+      closeQuickAdd();
+      activeFilter = "all";
+      activeGroup = "all";
       $("searchInput").value = "";
-      window.render();
-      window.renderGroups();
-      window.showToast(window.t("saved"));
+      render();
+      renderGroups();
+      showToast(t("saved"));
     } catch (error) {
       console.error("Redro quick save failed:", error);
-      window.showToast(window.t("dbError") + " (" + (error?.name || "Error") + ")");
+      showToast(t("dbError") + " (" + (error?.name || "Error") + ")");
     } finally {
       button.disabled = false;
     }
