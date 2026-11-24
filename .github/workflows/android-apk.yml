@@ -58,6 +58,51 @@ jobs:
         run: |
           sed -i 's/minSdkVersion = 23/minSdkVersion = 24/' android/variables.gradle
           grep -q 'minSdkVersion = 24' android/variables.gradle
+      - name: Generate Redro launcher icons
+        run: |
+          cat > /tmp/GenerateIcons.java <<'EOF'
+          import java.awt.*;
+          import java.awt.image.BufferedImage;
+          import java.io.File;
+          import javax.imageio.ImageIO;
+          public class GenerateIcons {
+            static BufferedImage render(BufferedImage src, int size, boolean inset) {
+              BufferedImage out = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+              Graphics2D g = out.createGraphics();
+              g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+              g.setColor(Color.WHITE);
+              g.fillRect(0, 0, size, size);
+              int target = inset ? (int)(size * 0.72) : size;
+              g.drawImage(src, (size-target)/2, (size-target)/2, target, target, null);
+              g.dispose();
+              return out;
+            }
+            public static void main(String[] args) throws Exception {
+              BufferedImage src = ImageIO.read(new File("assets/brand-icon.png"));
+              if (src == null) throw new IllegalStateException("Missing Redro brand icon");
+              String[] dirs = {"mipmap-mdpi","mipmap-hdpi","mipmap-xhdpi","mipmap-xxhdpi","mipmap-xxxhdpi"};
+              int[] sizes = {48,72,96,144,192};
+              for (int i=0;i<dirs.length;i++) {
+                File dir = new File("android/app/src/main/res/"+dirs[i]);
+                dir.mkdirs();
+                ImageIO.write(render(src,sizes[i],false),"png",new File(dir,"ic_launcher.png"));
+                ImageIO.write(render(src,sizes[i],true),"png",new File(dir,"ic_launcher_round.png"));
+                ImageIO.write(render(src,sizes[i],true),"png",new File(dir,"ic_launcher_foreground.png"));
+              }
+            }
+          }
+          EOF
+          javac /tmp/GenerateIcons.java
+          java -Djava.awt.headless=true -cp /tmp GenerateIcons
+          mkdir -p android/app/src/main/res/mipmap-anydpi-v26
+          cat > android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+            <background android:drawable="@android:color/white"/>
+            <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+          </adaptive-icon>
+          EOF
+          cp android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug --no-daemon
