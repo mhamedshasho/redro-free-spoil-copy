@@ -60,6 +60,7 @@
     const navInventory = document.querySelector(".bottom-nav .nav-item[href] small"); if(navInventory)navInventory.textContent=t("inventory");
     const restock = $("restockLabel"); if(restock && lang()==="ar")restock.textContent="إعادة التزويد";
     $("searchToggle")?.setAttribute("aria-label",t("search")); $("settingsToggle")?.setAttribute("aria-label",lang()==="ar"?"الإعدادات":"Settings");
+    [".soon-card",".expired-card"].forEach((selector,index)=>{const card=document.querySelector(selector);if(card){card.setAttribute("role","button");card.setAttribute("tabindex","0");card.setAttribute("aria-label",index===0?t("soon"):t("expiredFilter"));}});
   }
   function readPlan() {
     try { return JSON.parse(localStorage.getItem(PLAN_KEY) || "{}"); } catch { return {}; }
@@ -76,13 +77,22 @@
     const base = hash(item.id + "|" + item.expiryDate);
     return [base, base + 1, base + 2, base + 3];
   }
+  function expiryMoment(item) {
+    const date = new Date(item.expiryDate + "T00:00:00");
+    return Number.isFinite(date.getTime()) ? date.getTime() + 24 * 60 * 60000 + 5 * 60000 : NaN;
+  }
+  function expiryReminder(item) {
+    const date = new Date(item.expiryDate + "T09:00:00");
+    date.setDate(date.getDate() - 1);
+    return date.getTime();
+  }
   function expiryTimes(item) {
     const now = Date.now();
-    const date = new Date(item.expiryDate + "T09:00:00");
-    if (!Number.isFinite(date.getTime())) return [];
-    if (date.getTime() <= now) return [now + 15000, now + 30 * 60000, now + 2 * 60 * 60000];
-    const reminder = date.getTime() - 24 * 60 * 60000;
-    return [reminder > now ? reminder : date.getTime(), date.getTime(), date.getTime() + 6 * 60 * 60000, date.getTime() + 24 * 60 * 60000];
+    const expiresAt = expiryMoment(item);
+    if (!Number.isFinite(expiresAt)) return [];
+    if (expiresAt <= now) return [now + 15000, now + 30 * 60000, now + 2 * 60 * 60000];
+    const reminder = expiryReminder(item);
+    return [reminder > now ? reminder : expiresAt, expiresAt, expiresAt + 6 * 60 * 60000, expiresAt + 24 * 60 * 60000];
   }
   async function cancelIds(plugin, ids) {
     try { await plugin.cancel({notifications:ids.map(id=>({id}))}); } catch (error) { console.warn("Redro notification cancellation failed.", error); }
@@ -202,7 +212,7 @@
       await cancelIds(plugin, ids);
       const times = expiryTimes(item);
       times.forEach((time,index)=>{
-        const isReminder = index === 0 && new Date(item.expiryDate + "T09:00:00").getTime() > Date.now() + 24 * 60 * 60000;
+        const isReminder = index === 0 && expiryReminder(item) > Date.now() && expiryReminder(item) < expiryMoment(item);
         schedules.push({
           id:ids[index],
           title:isReminder?t("soonTitle"):t("expiredTitle"),
@@ -304,6 +314,15 @@
     return result;
   };
   window.RedroInventory = {getItems:()=>items.slice()};
+  function applyStatusShortcut(selector,filter) {
+    const card=document.querySelector(selector);
+    if(!card)return;
+    const activate=()=>{activeFilter=filter;render();document.querySelector(".inventory-section")?.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});};
+    card.addEventListener("click",activate);
+    card.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();activate();}});
+  }
+  applyStatusShortcut(".soon-card","soon");
+  applyStatusShortcut(".expired-card","expired");
   $("enableNotifications")?.addEventListener("click",enableNotifications);
   $("testNotifications")?.addEventListener("click",testNotifications);
   $("languageSelect")?.addEventListener("change",updateLabels);
