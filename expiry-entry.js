@@ -89,6 +89,13 @@
   $("quickExpiryDuration")?.addEventListener("input", updateQuick);
   $("quickCreatedDate")?.addEventListener("change", updateQuick);
   $("languageSelect")?.addEventListener("change", () => { translateFields(); updateFull(); updateQuick(); });
+  const previousApplyPreferences = applyPreferences;
+  applyPreferences = function applyExpiryEntryPreferences() {
+    previousApplyPreferences();
+    translateFields();
+    updateFull();
+    updateQuick();
+  };
   translateFields();
   updateFull();
   updateQuick();
