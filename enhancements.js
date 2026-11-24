@@ -2,6 +2,7 @@
   const $ = id => document.getElementById(id);
   const PLAN_KEY = "redro-notification-plan-v1";
   const PLUGIN = () => window.Capacitor?.Plugins?.LocalNotifications || window.Capacitor?.registerPlugin?.("LocalNotifications");
+  const SETTINGS_PLUGIN = () => window.Capacitor?.Plugins?.NotificationSettings || window.Capacitor?.registerPlugin?.("NotificationSettings");
   const lang = () => document.documentElement.lang || "ar";
   const strings = {
     ar:{
@@ -55,14 +56,15 @@
   }
   function notificationIds(item) {
     const base = hash(item.id + "|" + item.expiryDate);
-    return [base, base + 1, base + 2];
+    return [base, base + 1, base + 2, base + 3];
   }
   function expiryTimes(item) {
     const now = Date.now();
     const date = new Date(item.expiryDate + "T09:00:00");
     if (!Number.isFinite(date.getTime())) return [];
-    if (date.getTime() <= now) return [now + 15000, now + 30 * 60000, now + 2 * 60 * 60000];
-    return [date.getTime(), date.getTime() + 6 * 60 * 60000, date.getTime() + 24 * 60 * 60000];
+    if (date.getTime() <= now) return [now + 15000, now + 30 * 60000, now + 2 * 60 * 60000, now + 3 * 60000];
+    const reminder = date.getTime() - 24 * 60 * 60000;
+    return [reminder > now ? reminder : date.getTime(), date.getTime(), date.getTime() + 6 * 60 * 60000, date.getTime() + 24 * 60 * 60000];
   }
   async function cancelIds(plugin, ids) {
     try { await plugin.cancel({notifications:ids.map(id=>({id}))}); } catch (error) { console.warn("Redro notification cancellation failed.", error); }
@@ -98,6 +100,10 @@
     status.textContent = await permissionState(plugin) ? t("enabled") : t("disabled");
   }
   async function openNotificationSettings(plugin) {
+    const settings = SETTINGS_PLUGIN();
+    if (settings && typeof settings.open === "function") {
+      try { await settings.open(); return; } catch (error) { console.warn("Could not open Android notification settings.", error); }
+    }
     if (typeof plugin.openNotificationSettings === "function") {
       try { await plugin.openNotificationSettings(); return; } catch (error) { console.warn(error); }
     }
@@ -172,11 +178,11 @@
       await cancelIds(plugin, ids);
       const times = expiryTimes(item);
       times.forEach((time,index)=>{
-        const expired = time <= Date.now() + 60000 && new Date(item.expiryDate + "T23:59:59").getTime() < Date.now();
+        const isReminder = index === 0 && new Date(item.expiryDate + "T09:00:00").getTime() > Date.now() + 24 * 60 * 60000;
         schedules.push({
           id:ids[index],
-          title:expired?t("expiredTitle"):t("soonTitle"),
-          body:expired?fill(t("expiredBody"),item.name):fill(t("soonBody"),item.name),
+          title:isReminder?t("soonTitle"):t("expiredTitle"),
+          body:isReminder?fill(t("soonBody"),item.name):fill(t("expiredBody"),item.name),
           schedule:{at:new Date(time)},
           channelId:"redro-expiry-alerts",
           sound:"default",
