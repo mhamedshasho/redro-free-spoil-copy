@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "icons": {
+    "Vegetables": "🥦",
+    "Fruits": "🍎",
+    "Dairy": "🥛",
+    "Meat & Fish": "🥩",
+    "Bakery": "🍞",
+    "Drinks": "🧃",
+    "Other": "🥫"
+  }
+}
