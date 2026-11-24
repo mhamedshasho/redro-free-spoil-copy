@@ -31,3 +31,12 @@ Freshness labels are calculated from the entered dates only. They do not determi
 
 ## PDF
 Choose **Export PDF**, then use the browser or device print dialog and select **Save as PDF** when available.
+
+
+## Online time and offline resources
+
+The app attempts to synchronize UTC time from two HTTPS time APIs when internet access is available. It stores the last successful server-time anchor locally and estimates current time from that anchor while offline. If no successful synchronization has ever occurred, it falls back to the device clock. Inventory operations remain local-first.
+
+The optional category icon pack is requested with an in-app consent prompt. After consent, the pack is downloaded once and stored locally using browser storage/cache. The Settings screen provides a manual download/update action. The built-in symbols remain available if the download is skipped or fails.
+
+Time synchronization and icon downloads are best-effort network features; neither is required to open or use the inventory offline.
