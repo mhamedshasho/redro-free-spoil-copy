@@ -92,7 +92,7 @@
     if (!Number.isFinite(expiresAt)) return [];
     if (expiresAt <= now) return [now + 15000, now + 30 * 60000, now + 2 * 60 * 60000];
     const reminder = expiryReminder(item);
-    return [reminder > now ? reminder : expiresAt, expiresAt, expiresAt + 6 * 60 * 60000, expiresAt + 24 * 60 * 60000];
+    return reminder > now ? [reminder, expiresAt, expiresAt + 6 * 60 * 60000, expiresAt + 24 * 60 * 60000] : [expiresAt, expiresAt + 6 * 60 * 60000, expiresAt + 24 * 60 * 60000];
   }
   async function cancelIds(plugin, ids) {
     try { await plugin.cancel({notifications:ids.map(id=>({id}))}); } catch (error) { console.warn("Redro notification cancellation failed.", error); }
