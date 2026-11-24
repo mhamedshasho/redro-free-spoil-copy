@@ -12,6 +12,7 @@ on:
       - "ui.js"
       - "expiry-entry.js"
       - "runtime-services.js"
+      - "enhancements.js"
       - "sw.js"
       - "styles.css"
       - "assets/**"
