@@ -93,7 +93,7 @@
     ];
     const scheduled = reminders.map(entry=>({...entry,at:expiryAt-entry.days*86400000})).filter(entry=>entry.at>now).map(entry=>({id:entry.id,at:entry.at,title:entry.title,body:entry.body}));
     if (expiryAt>now) scheduled.push({id:2,at:expiryAt,title:t("expiredTitle"),body:fill(t("expiredBody"),item.name)});
-    else if (new Date(item.expiryDate+"T00:00:00").toDateString()===new Date(now).toDateString()) scheduled.push({id:2,at:now+5000,title:t("expiredTitle"),body:fill(t("expiredBody"),item.name)});
+    else scheduled.push({id:2,at:now+5000,title:t("expiredTitle"),body:fill(t("expiredBody"),item.name)});
     return scheduled;
   }
   async function cancelIds(plugin, ids) {
