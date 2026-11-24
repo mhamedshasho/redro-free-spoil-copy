@@ -337,3 +337,10 @@ body{min-height:100dvh;overscroll-behavior-y:contain}
   .summary-card strong{font-size:29px}
   .storage-tab{font-size:10px;gap:4px}
 }
+
+.app-dialog{background:var(--panel);color:var(--text);border-color:var(--line);box-shadow:0 24px 80px rgba(16,35,22,.22)}
+.app-dialog .dialog-description,.app-dialog .data-footnote{color:var(--muted)}
+:root[data-theme="dark"] .app-dialog{background:#1b2620;color:#f0f6f1;border-color:#34483a}
+:root[data-theme="dark"] .app-dialog .dialog-description,:root[data-theme="dark"] .app-dialog .data-footnote{color:#b2c2b6}
+.redro-resource-prompt{background:var(--panel);color:var(--text);border:1px solid var(--line)}
+.redro-resource-prompt .dialog-header{margin-bottom:12px}
