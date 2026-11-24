@@ -60,7 +60,8 @@ function foodSymbol(item) {
   if (item.image) return '<img src="' + escapeHtml(item.image) + '" alt="" loading="lazy">';
   const category = item.category || "Other";
   const symbols = {Vegetables:"🥦",Fruits:"🍎",Dairy:"🥛","Meat & Fish":"🥩",Bakery:"🍞",Drinks:"🧃",Other:"🥫"};
-  return '<span aria-hidden="true">' + (symbols[category] || "🥫") + '</span>';
+  const symbol = window.RedroResources?.iconFor?.(category) || symbols[category] || "🥫";
+  return '<span aria-hidden="true">' + escapeHtml(symbol) + '</span>';
 }
 function renderStorageSelects(location = $("itemLocation")?.value || activeLocation, selectedZone = "") {
   const locationSelects = [$("itemLocation"), $("quickLocation")].filter(Boolean);

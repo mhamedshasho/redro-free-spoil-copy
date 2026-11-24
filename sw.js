@@ -1,7 +1,7 @@
-const CACHE="redro-spoil-v9";
-const FILES=["./","./index.html","./styles.css","./app.js","./ui.js","./manifest.webmanifest","./assets/icon.svg","./assets/brand-icon.png","./assets/app-icon-192.png","./assets/app-icon-512.png","./assets/app-icon-maskable-512.png","./assets/apple-touch-icon.png"];
+const CACHE="redro-spoil-v13";
+const FILES=["./","./index.html","./styles.css","./app.js","./ui.js","./expiry-entry.js","./runtime-services.js","./enhancements.js","./manifest.webmanifest","./assets/icon-pack.json","./assets/icon.svg","./assets/brand-icon.png","./assets/app-icon-192.png","./assets/app-icon-512.png","./assets/app-icon-maskable-512.png","./assets/apple-touch-icon.png"];
 self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)));self.skipWaiting();});
-self.addEventListener("activate",event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(key=>key.startsWith("redro-food-stock-")&&key!==CACHE).map(key=>caches.delete(key)));await self.clients.claim();})());});
+self.addEventListener("activate",event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(key=>key.startsWith("redro-spoil-v")&&key!==CACHE).map(key=>caches.delete(key)));await self.clients.claim();})());});
 self.addEventListener("fetch",event=>{
  if(event.request.method!=="GET"||new URL(event.request.url).origin!==location.origin)return;
  const url=new URL(event.request.url);

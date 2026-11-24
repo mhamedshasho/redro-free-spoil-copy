@@ -6,7 +6,8 @@ A mobile-first, local-first food inventory and expiry tracker.
 - Add, edit, search, filter and delete inventory items.
 - Organize items by Fridge, Freezer and Pantry, with shelf or area locations.
 - Review expired and soon-to-expire items in a restock list and copy or download it.
-- Record quantity, unit, created/prepared date, expiry date and notes.
+- Record quantity, unit, production/prepared date, expiry date or shelf life in days, and notes.
+- Calculate an expiry date automatically from a production date and a shelf-life duration.
 - Automatic date-based freshness labels.
 - Local persistence with IndexedDB.
 - Export a complete JSON backup.
@@ -14,6 +15,10 @@ A mobile-first, local-first food inventory and expiry tracker.
 - Print the complete inventory as PDF, independent of the current location or filters.
 - Export inventory snapshots as PNG (up to 200 items per image).
 - Installable offline PWA with a service worker.
+
+## Android APK
+
+An Android build foundation is available on the `android-app-foundation` branch. The app is bundled locally into the APK and targets Android 7.0 (API 24) and newer. See [ANDROID-BUILD.md](ANDROID-BUILD.md) for build status and update constraints.
 
 ## Run locally
 Serve this folder through a local static web server, or publish it with GitHub Pages. IndexedDB and service workers require a supported browser context; service-worker installation requires HTTPS or localhost.
@@ -26,3 +31,12 @@ Freshness labels are calculated from the entered dates only. They do not determi
 
 ## PDF
 Choose **Export PDF**, then use the browser or device print dialog and select **Save as PDF** when available.
+
+
+## Online time and offline resources
+
+The app attempts to synchronize UTC time from two HTTPS time APIs when internet access is available. It stores the last successful server-time anchor locally and estimates current time from that anchor while offline. If no successful synchronization has ever occurred, it falls back to the device clock. Inventory operations remain local-first.
+
+The optional category icon pack is requested with an in-app consent prompt. After consent, the pack is downloaded once and stored locally using browser storage/cache. The Settings screen provides a manual download/update action. The built-in symbols remain available if the download is skipped or fails.
+
+Time synchronization and icon downloads are best-effort network features; neither is required to open or use the inventory offline.
