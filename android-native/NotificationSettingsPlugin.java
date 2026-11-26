@@ -18,7 +18,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 
 @CapacitorPlugin(name = "NotificationSettings")
 public class NotificationSettingsPlugin extends Plugin {
-    private static final String ALARM_CHANNEL_ID = "redro-expiry-alarm-v2";
+    private static final String ALARM_CHANNEL_ID = "redro-expiry-notifications-v3";
 
     @PluginMethod
     public void ensureAlarmChannel(PluginCall call) {
@@ -29,17 +29,17 @@ public class NotificationSettingsPlugin extends Plugin {
                 if (existing == null) {
                     NotificationChannel channel = new NotificationChannel(
                         ALARM_CHANNEL_ID,
-                        "Redro expiry alarms",
+                        "Redro notifications",
                         NotificationManager.IMPORTANCE_HIGH
                     );
-                    channel.setDescription("Audible expiry and inventory alerts");
+                    channel.setDescription("Expiry and inventory notifications");
                     channel.enableVibration(true);
                     channel.setVibrationPattern(new long[]{0, 700, 250, 700, 250, 1000});
                     channel.setLockscreenVisibility(android.app.Notification.VISIBILITY_PUBLIC);
-                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     if (alarmSound == null) alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     AudioAttributes attributes = new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                         .build();
                     channel.setSound(alarmSound, attributes);
