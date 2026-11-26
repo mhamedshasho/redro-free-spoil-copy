@@ -70,7 +70,8 @@ public class NotificationSettingsPlugin extends Plugin {
         try {
             JSONArray items = call.getArray("items");
             if (items == null) items = new JSONArray();
-            String language = call.getString("language", "ar");
+            String language = call.getString("language");
+            if (language == null || language.isEmpty()) language = "ar";
             getContext().getSharedPreferences("redro_background_inventory", Context.MODE_PRIVATE)
                 .edit()
                 .putString("items", items.toString())
