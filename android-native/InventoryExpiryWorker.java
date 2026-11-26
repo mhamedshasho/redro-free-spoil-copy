@@ -16,8 +16,10 @@ import androidx.work.WorkerParameters;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,7 +47,11 @@ public class InventoryExpiryWorker extends Worker {
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             ensureChannel(context, manager);
             Set<String> sent = new HashSet<>(prefs.getStringSet("sent", new HashSet<>()));
-            LocalDate today = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            dateFormat.setLenient(false);
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String todayText = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
+            Date todayDate = dateFormat.parse(todayText);
             boolean changed = false;
 
             for (int i = 0; i < items.length(); i++) {
@@ -57,11 +63,11 @@ public class InventoryExpiryWorker extends Worker {
                 String name = item.optString("name", "");
                 if (expiry.isEmpty() || itemId.isEmpty() || name.isEmpty()) continue;
 
-                LocalDate expiryDate;
-                try { expiryDate = LocalDate.parse(expiry); }
+                Date expiryDate;
+                try { expiryDate = dateFormat.parse(expiry); }
                 catch (Exception ignored) { continue; }
-
-                long days = ChronoUnit.DAYS.between(today, expiryDate);
+                if (expiryDate == null || todayDate == null) continue;
+                long days = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(expiryDate.getTime() - todayDate.getTime());
                 String kind = days == 3 ? "three" : days == 2 ? "two" : days <= 0 ? "expired" : "";
                 if (kind.isEmpty()) continue;
 
@@ -101,7 +107,7 @@ public class InventoryExpiryWorker extends Worker {
                 if (contentIntent != null) builder.setContentIntent(contentIntent);
                 if (Build.VERSION.SDK_INT < 26) builder.setDefaults(Notification.DEFAULT_ALL).setPriority(Notification.PRIORITY_HIGH);
 
-                int notificationId = Math.abs(key.hashCode());
+                int notificationId = key.hashCode() & 0x7fffffff;
                 manager.notify(notificationId, builder.build());
                 sent.add(key);
                 changed = true;
