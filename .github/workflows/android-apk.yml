@@ -55,7 +55,10 @@ jobs:
         run: |
           mkdir -p android/app/src/main/java/com/redro/spoilfreecopy
           cp android-native/NotificationSettingsPlugin.java android/app/src/main/java/com/redro/spoilfreecopy/NotificationSettingsPlugin.java
+          cp android-native/InventoryExpiryWorker.java android/app/src/main/java/com/redro/spoilfreecopy/InventoryExpiryWorker.java
           cp android-native/MainActivity.java android/app/src/main/java/com/redro/spoilfreecopy/MainActivity.java
+          sed -i '/dependencies {/a\    implementation "androidx.work:work-runtime:2.10.0"' android/app/build.gradle
+          sed -i '/<application/i\    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />' android/app/src/main/AndroidManifest.xml
       - name: Set Android 7 minimum API
         run: |
           sed -i 's/minSdkVersion = 23/minSdkVersion = 24/' android/variables.gradle
