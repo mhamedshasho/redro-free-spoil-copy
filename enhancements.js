@@ -112,8 +112,8 @@
     if (plugin.createChannel) {
       try {
         await plugin.createChannel({
-          id:"redro-expiry-alarm-v2",
-          name:lang()==="ar"?"تنبيهات صلاحية المواد":"Expiry alerts",
+          id:"redro-expiry-notifications-v3",
+          name:lang()==="ar"?"إشعارات Redro":"Redro notifications",
           description:lang()==="ar"?"تنبيهات المواد القريبة والمنتهية الصلاحية":"Expiry and stock alerts",
           importance:5,
           sound:"default",
@@ -122,7 +122,7 @@
         });
       } catch (error) { console.warn("Redro notification channel setup failed.", error); }
     }
-    return "redro-expiry-alarm-v2";
+    return "redro-expiry-notifications-v3";
   }
   async function permissionState(plugin) {
     try {
@@ -195,7 +195,7 @@
         title:t("testTitle"),
         body:t("testBody"),
         schedule:{at:new Date(Date.now()+1200)},
-        channelId:"redro-expiry-alarm-v2",
+        channelId:"redro-expiry-notifications-v3",
         sound:"default",
         smallIcon:"ic_stat_icon_config_sample"
       }]});
@@ -230,7 +230,7 @@
           title:entry.title,
           body:entry.body,
           schedule:{at:new Date(entry.at)},
-          channelId:"redro-expiry-alarm-v2",
+          channelId:"redro-expiry-notifications-v3",
           sound:"default",
           smallIcon:"ic_stat_icon_config_sample",
           extra:{itemId:item.id,expiryDate:item.expiryDate}
