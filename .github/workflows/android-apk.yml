@@ -58,7 +58,19 @@ jobs:
           cp android-native/InventoryExpiryWorker.java android/app/src/main/java/com/redro/spoilfreecopy/InventoryExpiryWorker.java
           cp android-native/MainActivity.java android/app/src/main/java/com/redro/spoilfreecopy/MainActivity.java
           sed -i '/dependencies {/a\    implementation "androidx.work:work-runtime:2.10.0"' android/app/build.gradle
-          sed -i '/<application/i\    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />' android/app/src/main/AndroidManifest.xml
+          python3 - <<'PY'
+          from pathlib import Path
+          manifest = Path("android/app/src/main/AndroidManifest.xml")
+          content = manifest.read_text()
+          permissions = [
+              '    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />',
+              '    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />',
+          ]
+          for permission in permissions:
+              if permission not in content:
+                  content = content.replace("    <application", permission + "\\n    <application", 1)
+          manifest.write_text(content)
+          PY
       - name: Set Android 7 minimum API
         run: |
           sed -i 's/minSdkVersion = 23/minSdkVersion = 24/' android/variables.gradle
