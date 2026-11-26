@@ -11,6 +11,7 @@ on:
       - "app.js"
       - "ui.js"
       - "expiry-entry.js"
+      - "inventory-fields.js"
       - "runtime-services.js"
       - "enhancements.js"
       - "android-native/**"
