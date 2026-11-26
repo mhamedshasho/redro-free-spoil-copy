@@ -25,9 +25,7 @@
   }
 
   function estimatedNow() {
-    if (!anchor) return Date.now();
-    const delta = Date.now() - anchor.localEpoch;
-    return anchor.serverEpoch + Math.max(0, delta);
+    return Date.now();
   }
 
   function dateParts(epoch) {
@@ -81,22 +79,7 @@
     return candidate;
   }
 
-  async function syncTime() {
-    if (!navigator.onLine) return false;
-    for (const endpoint of TIME_ENDPOINTS) {
-      try {
-        const payload = await requestJson(endpoint);
-        const serverEpoch = parseTime(payload);
-        persistAnchor({ serverEpoch, localEpoch: Date.now(), syncedAt: new Date().toISOString() });
-        updateClockStatus();
-        const label = document.getElementById("todayLabel");
-        if (label) label.textContent = dateLabel();
-        window.dispatchEvent(new Event("redro-time-updated"));
-        return true;
-      } catch (error) {
-        console.warn("Redro time sync failed:", endpoint, error);
-      }
-    }
+  function syncTime() {
     updateClockStatus();
     return false;
   }
@@ -339,7 +322,6 @@
   }
   syncTime();
   window.addEventListener("online", () => {
-    syncTime();
     if (localStorage.getItem("redro-icon-consent-v1") === "granted" && !iconPack) downloadPack();
   });
   document.getElementById("languageSelect")?.addEventListener("change", renderSettings);
