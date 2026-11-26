@@ -85,6 +85,18 @@
   $("clearActivityReport")?.addEventListener("click",()=>{if(!confirm(t("clear")))return;write([]);renderReport();showToast(t("clearDone"));});
   $("activityReportDialog")?.addEventListener("close",renderReport);
   window.addEventListener("storage",event=>{if(event.key===KEY&&$("activityReportDialog")?.open)renderReport();});
+  function updateUnitPriceLabels(){
+    const ar=language()==="ar";
+    const units={pcs:ar?"القطعة": "piece",kg:ar?"الكيلوغرام":"kg",g:ar?"الغرام":"g",L:ar?"اللتر":"liter",ml:ar?"الملليلتر":"ml",box:ar?"الصندوق":"box",pack:ar?"العبوة":"pack",bag:ar?"الكيس":"bag",other:ar?"الوحدة":"unit"};
+    [["itemUnit","itemUnitPriceLabel"],["quickUnit","quickUnitPriceLabel"]].forEach(([selectId,labelId])=>{
+      const select=$(selectId),label=$(labelId);if(!select||!label)return;
+      const unit=units[select.value]||units.other;
+      label.textContent=ar?"سعر "+unit:"Price per "+unit;
+    });
+  }
+  $("itemUnit")?.addEventListener("change",updateUnitPriceLabels);
+  $("quickUnit")?.addEventListener("change",updateUnitPriceLabels);
+  $("languageSelect")?.addEventListener("change",updateUnitPriceLabels);
   window.RedroActivityReport={getEntries:read,render:renderReport};
-  window.addEventListener("load",()=>render());
+  window.addEventListener("load",()=>{render();updateUnitPriceLabels();});
 })();
