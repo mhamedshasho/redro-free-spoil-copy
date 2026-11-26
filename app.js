@@ -114,3 +114,4 @@ function applyPreferences(){
  render();
 }
 function savePreferences(){try{localStorage.setItem(PREF_KEY,JSON.stringify({theme:$("themeSelect").value,language:$("languageSelect").value}));}catch(error){console.warn("Redro preferences could not be saved.",error);}applyPreferences();}
+
