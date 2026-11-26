@@ -76,7 +76,7 @@
     root.innerHTML=data.map(row=>{
       const action=t(row.action);
       const date=new Date(row.at);
-      const detail=row.previousQuantity!==undefined?t("quantity")+": "+row.previousQuantity+" "+t("from")+" "+row.quantity+" "+t("to")+" "+row.unit:"";
+      const detail=row.previousQuantity!==undefined?t("quantity")+": "+row.previousQuantity+" → "+row.quantity+" "+row.unit:"";
       const prices=[row.packagePrice!==null&&row.packagePrice!==undefined?t("package")+": "+row.packagePrice+" "+row.currency:"",row.unitPrice!==null&&row.unitPrice!==undefined?t("unitPrice")+": "+row.unitPrice+" "+row.currency:""].filter(Boolean).join(" · ");
       return '<article class="activity-report-row"><strong>'+escapeHtml(action)+' — '+escapeHtml(row.name)+'</strong><p>'+escapeHtml([detail,prices].filter(Boolean).join(" · ")||row.unit||"")+'</p><time datetime="'+escapeHtml(row.at)+'">'+escapeHtml(date.toLocaleString())+'</time></article>';
     }).join("");
