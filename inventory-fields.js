@@ -21,8 +21,7 @@
         meta.append(price);
       }
       if (item.hasExpiry === false || !item.expiryDate) {
-        const date = [...meta.children].find(node => node.textContent.includes(item.expiryDate || "Invalid"));
-        if (date) date.remove();
+        meta.children[1]?.remove();
       }
     });
   };
