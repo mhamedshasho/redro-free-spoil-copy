@@ -37,8 +37,9 @@
       return date.getUTCFullYear()===y && date.getUTCMonth()===m-1 && date.getUTCDate()===d;
     };
     return data.items.map(item => {
+      if (!item || typeof item !== "object") throw new Error(t("invalidRecord"));
       const hasExpiry = item.hasExpiry !== false && Boolean(item.expiryDate);
-      if (!item || typeof item.name!=="string" || !item.name.trim() || typeof item.id!=="string" || !item.id || seen.has(item.id) || !Number.isFinite(Number(item.quantity)) || Number(item.quantity)<0 || !realDate(item.createdDate) || (hasExpiry && (!realDate(item.expiryDate) || item.expiryDate<item.createdDate))) throw new Error(t("invalidRecord"));
+      if (typeof item.name!=="string" || !item.name.trim() || typeof item.id!=="string" || !item.id || seen.has(item.id) || !Number.isFinite(Number(item.quantity)) || Number(item.quantity)<0 || !realDate(item.createdDate) || (hasExpiry && (!realDate(item.expiryDate) || item.expiryDate<item.createdDate))) throw new Error(t("invalidRecord"));
       const price = item.price === null || item.price === undefined || item.price === "" ? null : Number(item.price);
       if (price !== null && (!Number.isFinite(price) || price < 0)) throw new Error(t("invalidRecord"));
       seen.add(item.id);
