@@ -210,6 +210,35 @@
     if (!plugin || !(await permissionState(plugin))) return;
     await createChannel(plugin);
     const oldPlan = readPlan();
+    const settings = SETTINGS_PLUGIN();
+    if (settings && typeof settings.syncInventoryBackground === "function") {
+      const ids = new Set();
+      for (const [id, signature] of Object.entries(oldPlan)) {
+        const oldExpiry = String(signature).split("|")[0];
+        if (oldExpiry) notificationIds({id,expiryDate:oldExpiry}).forEach(value=>ids.add(value));
+      }
+      for (const item of items) {
+        if (item?.id && item?.expiryDate) notificationIds(item).forEach(value=>ids.add(value));
+      }
+      if (ids.size) await cancelIds(plugin,[...ids]);
+      const result = await settings.syncInventoryBackground({
+        items:items.map(item=>({
+          id:item.id,
+          name:item.name,
+          quantity:item.quantity,
+          hasExpiry:item.hasExpiry,
+          expiryDate:item.expiryDate
+        })),
+        language:lang()
+      });
+      const nextPlan = {};
+      for (const item of items) {
+        if (item?.id && item?.hasExpiry && item?.expiryDate) nextPlan[String(item.id)] = String(item.expiryDate)+"|"+String(item.name||"");
+      }
+      savePlan(nextPlan);
+      return result;
+    }
+
     const nextPlan = {};
     const schedules = [];
     const validIds = new Set();
