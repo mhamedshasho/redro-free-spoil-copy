@@ -31,6 +31,7 @@
           <p class="subheading" id="greetingSubtitle">تابع مخزونك وتواريخ صلاحية منتجاتك بسهولة.</p>
         </div>
         <div class="heading-actions">
+          <button type="button" class="secondary-button" id="reportToggle">التقارير</button>
           <button type="button" class="restock-button" id="restockToggle"><span class="restock-symbol" aria-hidden="true">↻</span><span id="restockLabel">Restock</span><b id="restockCount">0</b></button>
           <button class="primary-button add-top" id="addItemTop"><span>＋</span> Add item</button>
         </div>
@@ -81,7 +82,7 @@
           <label class="quick-field"><span>اسم المادة</span><input id="quickName" type="text" maxlength="90" placeholder="اسم المادة" required autocomplete="off"><small class="quick-tip" data-tip-key="nameTip">Give it a name that is easy to recognize.</small></label>
           <label class="quick-field"><span>Group</span><select id="quickCategory" class="category-select" aria-label="Group"></select><small class="quick-tip" data-tip-key="groupTip">An optional label for similar items.</small></label>
           <label class="quick-field"><span>مكان التخزين</span><select id="quickLocation" class="category-select" aria-label="مكان التخزين"></select><small class="quick-tip" data-tip-key="locationTip">Choose where this item is stored.</small></label>
-          <div class="quick-add-fields"><label class="quick-field"><span>السعر</span><input id="quickPrice" type="number" min="0" step="any" inputmode="decimal" placeholder="0"></label><label class="quick-field"><span>العملة</span><input id="quickCurrency" type="text" maxlength="12" placeholder="SYP"></label></div><div class="quick-add-fields"><label class="quick-field"><span>الكمية</span><input id="quickQuantity" type="number" min="0" step="any" value="1" aria-label="الكمية" required><small class="quick-tip" data-tip-key="quantityTip">Enter the amount currently available.</small></label><label class="quick-field"><span>Unit</span><select id="quickUnit" aria-label="Unit"><option>pcs</option><option>kg</option><option>g</option><option>L</option><option>ml</option><option>box</option><option>pack</option><option>bag</option><option>other</option></select><small class="quick-tip" data-tip-key="unitTip">Choose how you measure the amount.</small></label></div><div class="quick-date-fields"><label class="quick-field"><span id="quickCreatedLabel">تاريخ الإنتاج أو التحضير</span><input id="quickCreatedDate" type="date" aria-label="تاريخ الإنتاج أو التحضير" required><small class="quick-tip" data-tip-key="createdTip">When it was made or prepared.</small></label><div class="quick-field"><label><input id="quickHasExpiry" type="checkbox" checked> للمادة تاريخ انتهاء صلاحية</label><div id="quickExpiryFields"><span>طريقة تحديد الصلاحية</span><select id="quickExpiryMode" class="category-select"><option value="date">اختر تاريخ الانتهاء</option><option value="duration">أدخل مدة الصلاحية</option></select><label id="quickExpiryDateWrap" class="quick-field"><span>تاريخ الانتهاء</span><input id="quickExpiry" type="date" aria-label="تاريخ الانتهاء" required></label><label id="quickExpiryDurationWrap" class="quick-field" hidden><span>مدة الصلاحية (يوم)</span><input id="quickExpiryDuration" type="number" min="1" max="36500" step="1" inputmode="numeric" placeholder="e.g. 30"></label><small id="quickExpiryCalculated" class="quick-tip" aria-live="polite"></small></div></div></div>
+          <div class="quick-add-fields"><label class="quick-field"><span>سعر الحزمة كاملة</span><input id="quickPrice" type="number" min="0" step="any" inputmode="decimal" placeholder="0"></label><label class="quick-field"><span>سعر القطعة / الوحدة</span><input id="quickUnitPrice" type="number" min="0" step="any" inputmode="decimal" placeholder="0"></label></div><label class="quick-field"><span>العملة</span><input id="quickCurrency" type="text" maxlength="12" placeholder="SYP"></label><div class="quick-add-fields"><label class="quick-field"><span>الكمية</span><input id="quickQuantity" type="number" min="0" step="any" value="1" aria-label="الكمية" required><small class="quick-tip" data-tip-key="quantityTip">Enter the amount currently available.</small></label><label class="quick-field"><span>Unit</span><select id="quickUnit" aria-label="Unit"><option>pcs</option><option>kg</option><option>g</option><option>L</option><option>ml</option><option>box</option><option>pack</option><option>bag</option><option>other</option></select><small class="quick-tip" data-tip-key="unitTip">Choose how you measure the amount.</small></label></div><div class="quick-date-fields"><label class="quick-field"><span id="quickCreatedLabel">تاريخ الإنتاج أو التحضير</span><input id="quickCreatedDate" type="date" aria-label="تاريخ الإنتاج أو التحضير" required><small class="quick-tip" data-tip-key="createdTip">When it was made or prepared.</small></label><div class="quick-field"><label><input id="quickHasExpiry" type="checkbox" checked> للمادة تاريخ انتهاء صلاحية</label><div id="quickExpiryFields"><span>طريقة تحديد الصلاحية</span><select id="quickExpiryMode" class="category-select"><option value="date">اختر تاريخ الانتهاء</option><option value="duration">أدخل مدة الصلاحية</option></select><label id="quickExpiryDateWrap" class="quick-field"><span>تاريخ الانتهاء</span><input id="quickExpiry" type="date" aria-label="تاريخ الانتهاء" required></label><label id="quickExpiryDurationWrap" class="quick-field" hidden><span>مدة الصلاحية (يوم)</span><input id="quickExpiryDuration" type="number" min="1" max="36500" step="1" inputmode="numeric" placeholder="e.g. 30"></label><small id="quickExpiryCalculated" class="quick-tip" aria-live="polite"></small></div></div></div>
           <button class="primary-button quick-save" id="quickSave" type="submit">Add item</button>
         </form>
         <div class="inventory-list" id="inventoryList" aria-live="polite"></div>
@@ -117,7 +118,8 @@
       </div>
       <label class="field-label">اسم المادة<input id="itemName" name="name" required maxlength="90" placeholder="e.g. Fresh milk"><small class="field-tip" data-tip-key="nameTip">Use a clear name that you can recognize quickly.</small></label>
       <div class="field-row">
-        <label class="field-label">السعر<input id="itemPrice" name="price" type="number" min="0" step="any" inputmode="decimal" placeholder="0"></label>
+        <label class="field-label">سعر الحزمة كاملة<input id="itemPrice" name="price" type="number" min="0" step="any" inputmode="decimal" placeholder="0"></label>
+        <label class="field-label">سعر القطعة / الوحدة<input id="itemUnitPrice" name="unitPrice" type="number" min="0" step="any" inputmode="decimal" placeholder="0"></label>
         <label class="field-label">العملة<input id="itemCurrency" name="currency" type="text" maxlength="12" placeholder="SYP"></label>
       </div>
       <div class="field-row">
@@ -139,6 +141,14 @@
     <div id="restockList" class="restock-list"></div>
     <p id="restockEmpty" class="restock-empty" hidden>Nothing needs restocking right now.</p>
     <div class="dialog-actions"><button type="button" class="secondary-button" data-close="restockDialog" id="restockClose">Close</button><button type="button" class="primary-button" id="copyRestock" disabled>Copy selected</button></div>
+  </dialog>
+
+  <dialog class="app-dialog compact-dialog" id="activityReportDialog">
+    <div class="dialog-header"><div><p class="eyebrow">REDRO ACTIVITY</p><h2>تقرير حركة المخزون</h2></div><button type="button" class="close-button" data-close="activityReportDialog" aria-label="Close">×</button></div>
+    <p class="dialog-description">سجل العمليات المنفذة على المواد: الإضافة والتعديل والخصم وإعادة التعبئة والحذف.</p>
+    <div id="activityReportList" class="activity-report-list"></div>
+    <p id="activityReportEmpty" class="restock-empty" hidden>لا توجد عمليات مسجلة بعد.</p>
+    <div class="dialog-actions"><button type="button" class="secondary-button" id="clearActivityReport">مسح سجل التقارير</button></div>
   </dialog>
 
   <dialog class="app-dialog compact-dialog" id="settingsDialog">
@@ -178,6 +188,7 @@
   <script src="runtime-services.js"></script>
   <script src="enhancements.js"></script>
   <script src="inventory-fields.js"></script>
+  <script src="activity-report.js"></script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
 </body>
 </html>
