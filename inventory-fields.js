@@ -10,7 +10,7 @@
     oldRender();
     document.querySelectorAll(".item-card").forEach(card => {
       const edit = card.querySelector("[data-edit]");
-      const item = (window.items || []).find(entry => entry.id === edit?.dataset.edit);
+      const item = items.find(entry => entry.id === edit?.dataset.edit);
       if (!item) return;
       const meta = card.querySelector(".item-meta");
       if (!meta) return;
