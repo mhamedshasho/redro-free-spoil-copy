@@ -56,7 +56,7 @@ public class InventoryExpiryWorker extends Worker {
 
             for (int i = 0; i < items.length(); i++) {
                 JSONObject item = items.optJSONObject(i);
-                if (item == null || !item.optBoolean("hasExpiry", false)) continue;
+                if (item == null || !item.optBoolean("hasExpiry", true)) continue;
                 if (item.optDouble("quantity", 0) <= 0) continue;
                 String expiry = item.optString("expiryDate", "");
                 String itemId = item.optString("id", "");
