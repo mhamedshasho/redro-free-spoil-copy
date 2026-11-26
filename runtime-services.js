@@ -316,14 +316,8 @@
   });
   if (!localStorage.getItem("redro-icon-consent-v1")) {
     setTimeout(showFirstRunPrompt, 700);
-  } else if (localStorage.getItem("redro-icon-consent-v1") === "granted" && !iconPack) {
-    window.addEventListener("online", () => downloadPack());
-    if (navigator.onLine) downloadPack();
   }
   syncTime();
-  window.addEventListener("online", () => {
-    if (localStorage.getItem("redro-icon-consent-v1") === "granted" && !iconPack) downloadPack();
-  });
   document.getElementById("languageSelect")?.addEventListener("change", renderSettings);
   document.getElementById("settingsToggle")?.addEventListener("click", () => {
     ensureSettings();
