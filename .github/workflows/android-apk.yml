@@ -26,7 +26,7 @@ on:
       - ".github/workflows/android-apk.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -130,3 +130,14 @@ jobs:
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
+
+      - name: Publish background-enabled APK release
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[apk-release]')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-background-${{ github.run_id }}
+          name: Redro Spoil Background Build
+          files: android/app/build/outputs/apk/debug/app-debug.apk
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
