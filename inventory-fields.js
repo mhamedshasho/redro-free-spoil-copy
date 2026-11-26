@@ -2,7 +2,7 @@
   const $ = id => document.getElementById(id);
   const oldStatusOf = window.statusOf;
   window.statusOf = function(item) {
-    if (item?.hasExpiry === false || !item?.expiryDate) return {key:"noExpiry",label:document.documentElement.lang==="ar"?"بلا تاريخ انتهاء":"No expiry date"};
+    if (item?.hasExpiry === false || !item?.expiryDate) return {key:"fresh",label:document.documentElement.lang==="ar"?"لا يحتاج إلى تاريخ انتهاء":"No expiry date"};
     return oldStatusOf(item);
   };
   const oldRender = window.render;
