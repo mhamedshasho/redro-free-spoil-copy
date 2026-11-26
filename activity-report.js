@@ -20,10 +20,15 @@
   persistUpdatedRecord = async function(record,expectedUpdatedAt){
     const before=items.find(x=>x.id===record.id)||{};
     const action=Number(record.quantity)<Number(before.quantity)?"decreased":Number(record.quantity)>Number(before.quantity)?"restocked":"edited";
+    const fieldLabels={name:"الاسم",quantity:"الكمية",price:"سعر الحزمة",unitPrice:"سعر الوحدة",unit:"الوحدة",expiryDate:"الصلاحية",createdDate:"تاريخ الإضافة",category:"المجموعة",notes:"الملاحظات",storageLocation:"مكان التخزين",storageZone:"الموقع"};
+    const changes=[];
+    [["name","name"],["quantity","quantity"],["packagePrice","packagePrice"],["unitPrice","unitPrice"],["unit","unit"],["expiryDate","expiryDate"],["createdDate","createdDate"],["category","category"],["notes","notes"],["storageLocation","storageLocation"],["storageZone","storageZone"]].forEach(([key,label])=>{
+      const oldValue=key==="packagePrice"?(before.packagePrice??before.price):(before[key]);
+      const newValue=key==="packagePrice"?(record.packagePrice??record.price):(record[key]);
+      if(String(oldValue??"")!==String(newValue??""))changes.push((language()==="ar"?fieldLabels[label]:label)+": "+String(oldValue??"—")+" → "+String(newValue??"—"));
+    });
     await oldPersistUpdate(record,expectedUpdatedAt);
-    if(action==="decreased") log("decreased",record,{previousQuantity:before.quantity,quantity:record.quantity});
-    else if(action==="restocked") log("restocked",record,{previousQuantity:before.quantity,quantity:record.quantity});
-    else log("edited",record,{previousQuantity:before.quantity,quantity:record.quantity});
+    log(action,record,{previousQuantity:before.quantity,quantity:record.quantity,changes});
   };
   const oldPersistDelete = persistDeletedRecord;
   persistDeletedRecord = async function(id,expectedUpdatedAt){
@@ -78,7 +83,8 @@
       const date=new Date(row.at);
       const detail=row.previousQuantity!==undefined?t("quantity")+": "+row.previousQuantity+" → "+row.quantity+" "+row.unit:"";
       const prices=[row.packagePrice!==null&&row.packagePrice!==undefined?t("package")+": "+row.packagePrice+" "+row.currency:"",row.unitPrice!==null&&row.unitPrice!==undefined?t("unitPrice")+": "+row.unitPrice+" "+row.currency:""].filter(Boolean).join(" · ");
-      return '<article class="activity-report-row"><strong>'+escapeHtml(action)+' — '+escapeHtml(row.name)+'</strong><p>'+escapeHtml([detail,prices].filter(Boolean).join(" · ")||row.unit||"")+'</p><time datetime="'+escapeHtml(row.at)+'">'+escapeHtml(date.toLocaleString())+'</time></article>';
+      const changes=Array.isArray(row.changes)?row.changes.join(" · "):"";
+      return '<article class="activity-report-row"><strong>'+escapeHtml(action)+' — '+escapeHtml(row.name)+'</strong><p>'+escapeHtml([detail,changes,prices].filter(Boolean).join(" · ")||row.unit||"")+'</p><time datetime="'+escapeHtml(row.at)+'">'+escapeHtml(date.toLocaleString())+'</time></article>';
     }).join("");
   }
   $("reportToggle")?.addEventListener("click",()=>{renderReport();$("activityReportDialog").showModal();});
