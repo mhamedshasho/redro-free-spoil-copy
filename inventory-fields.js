@@ -17,8 +17,14 @@
       if (item.price !== null && item.price !== undefined && item.price !== "") {
         const price = document.createElement("span");
         price.className = "item-price";
-        price.textContent = (document.documentElement.lang === "ar" ? "السعر: " : "Price: ") + Number(item.price).toLocaleString() + " " + (item.currency || "SYP");
+        price.textContent = (document.documentElement.lang === "ar" ? "سعر الحزمة: " : "Package: ") + Number(item.packagePrice ?? item.price).toLocaleString() + " " + (item.currency || "SYP");
         meta.append(price);
+      }
+      if (item.unitPrice !== null && item.unitPrice !== undefined && item.unitPrice !== "") {
+        const unitPrice = document.createElement("span");
+        unitPrice.className = "item-unit-price";
+        unitPrice.textContent = (document.documentElement.lang === "ar" ? "سعر الوحدة: " : "Unit: ") + Number(item.unitPrice).toLocaleString() + " " + (item.currency || "SYP");
+        meta.append(unitPrice);
       }
       if (item.hasExpiry === false || !item.expiryDate) {
         meta.children[1]?.remove();
@@ -41,14 +47,17 @@
       if (typeof item.name!=="string" || !item.name.trim() || typeof item.id!=="string" || !item.id || seen.has(item.id) || !Number.isFinite(Number(item.quantity)) || Number(item.quantity)<0 || !realDate(item.createdDate) || (hasExpiry && (!realDate(item.expiryDate) || item.expiryDate<item.createdDate))) throw new Error(t("invalidRecord"));
       const price = item.price === null || item.price === undefined || item.price === "" ? null : Number(item.price);
       if (price !== null && (!Number.isFinite(price) || price < 0)) throw new Error(t("invalidRecord"));
+      const unitPrice = item.unitPrice === null || item.unitPrice === undefined || item.unitPrice === "" ? null : Number(item.unitPrice);
+      if (unitPrice !== null && (!Number.isFinite(unitPrice) || unitPrice < 0)) throw new Error(t("invalidRecord"));
       seen.add(item.id);
-      return {...item,id:item.id,name:item.name.trim(),quantity:Number(item.quantity),price,currency:String(item.currency||"SYP").slice(0,12),hasExpiry,expiryDate:hasExpiry?item.expiryDate:"",unit:String(item.unit||"pcs"),category:String(item.category||"Other"),storageLocation:["Fridge","Freezer","Pantry"].includes(item.storageLocation)?item.storageLocation:"Fridge",storageZone:String(item.storageZone||""),createdDate:item.createdDate,notes:String(item.notes||"").slice(0,500),image:typeof item.image==="string"&&item.image.startsWith("data:image/")&&item.image.length<=7*1024*1024?item.image:"",updatedAt:typeof item.updatedAt==="string"?item.updatedAt:new Date().toISOString()};
+      return {...item,id:item.id,name:item.name.trim(),quantity:Number(item.quantity),price,packagePrice:price,unitPrice,currency:String(item.currency||"SYP").slice(0,12),hasExpiry,expiryDate:hasExpiry?item.expiryDate:"",unit:String(item.unit||"pcs"),category:String(item.category||"Other"),storageLocation:["Fridge","Freezer","Pantry"].includes(item.storageLocation)?item.storageLocation:"Fridge",storageZone:String(item.storageZone||""),createdDate:item.createdDate,notes:String(item.notes||"").slice(0,500),image:typeof item.image==="string"&&item.image.startsWith("data:image/")&&item.image.length<=7*1024*1024?item.image:"",updatedAt:typeof item.updatedAt==="string"?item.updatedAt:new Date().toISOString()};
     });
   };
   const priorOpen = window.openItem;
   window.openItem = function(item) {
     priorOpen(item);
-    $("itemPrice").value = item?.price ?? "";
+    $("itemPrice").value = item?.packagePrice ?? item?.price ?? "";
+    $("itemUnitPrice").value = item?.unitPrice ?? "";
     $("itemCurrency").value = item?.currency || "SYP";
     $("hasExpiry").checked = item?.hasExpiry !== false && Boolean(item?.expiryDate);
     $("expiryFields").hidden = !$("hasExpiry").checked;
