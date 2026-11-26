@@ -1,9 +1,10 @@
 name: Publish Android APK Release
 
 on:
-  push:
-    paths:
-      - ".github/workflows/publish-apk-release.yml"
+  workflow_run:
+    workflows: ["Android APK"]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -12,6 +13,7 @@ permissions:
 
 jobs:
   publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
