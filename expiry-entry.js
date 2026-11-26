@@ -137,7 +137,7 @@
     const unitPriceRaw = $("itemUnitPrice").value.trim();
     const price = priceRaw === "" ? null : Number(priceRaw);
     const unitPrice = unitPriceRaw === "" ? null : Number(unitPriceRaw);
-    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || (price !== null && (!Number.isFinite(price) || price < 0)) || (unitPrice !== null && (!Number.isFinite(unitPrice) || unitPrice < 0)) || (hasExpiry && (!expiryDate || (mode === "duration" && !validDays($("expiryDuration").value))))) {
+    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || price === null || unitPrice === null || !Number.isFinite(price) || price < 0 || !Number.isFinite(unitPrice) || unitPrice < 0 || (hasExpiry && (!expiryDate || (mode === "duration" && !validDays($("expiryDuration").value))))) {
       $("formError").textContent = text().durationHint;
       return;
     }
@@ -187,7 +187,7 @@
     const unitPriceRaw = $("quickUnitPrice").value.trim();
     const price = priceRaw === "" ? null : Number(priceRaw);
     const unitPrice = unitPriceRaw === "" ? null : Number(unitPriceRaw);
-    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || (price !== null && (!Number.isFinite(price) || price < 0)) || (unitPrice !== null && (!Number.isFinite(unitPrice) || unitPrice < 0)) || (hasExpiry && (!expiryDate || (mode === "duration" && !validDays($("quickExpiryDuration").value))))) {
+    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || price === null || unitPrice === null || !Number.isFinite(price) || price < 0 || !Number.isFinite(unitPrice) || unitPrice < 0 || (hasExpiry && (!expiryDate || (mode === "duration" && !validDays($("quickExpiryDuration").value))))) {
       $("quickName").focus();
       return;
     }
