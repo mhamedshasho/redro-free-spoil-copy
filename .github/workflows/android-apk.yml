@@ -132,7 +132,7 @@ jobs:
           retention-days: 14
 
       - name: Publish background-enabled APK release
-        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[apk-release]')
+        if: contains(github.event.head_commit.message, '[apk-release]')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: android-background-${{ github.run_id }}
