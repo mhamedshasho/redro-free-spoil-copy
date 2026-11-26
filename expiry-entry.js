@@ -85,7 +85,8 @@
       $("expiryMode").value = "date";
       $("expiryDuration").value = "";
       $("hasExpiry").checked = item?.hasExpiry !== false && Boolean(item?.expiryDate);
-      $("itemPrice").value = item?.price ?? "";
+      $("itemPrice").value = item?.packagePrice ?? item?.price ?? "";
+      $("itemUnitPrice").value = item?.unitPrice ?? "";
       $("itemCurrency").value = item?.currency || "SYP";
       updateFull();
     };
@@ -98,6 +99,7 @@
       $("quickExpiryDuration").value = "";
       $("quickHasExpiry").checked = true;
       $("quickPrice").value = "";
+      $("quickUnitPrice").value = "";
       $("quickCurrency").value = "SYP";
       updateQuick();
     };
@@ -132,8 +134,10 @@
     const hasExpiry = $("hasExpiry").checked;
     const expiryDate = !hasExpiry ? "" : mode === "duration" ? calculated("", mode, createdDate, $("expiryDuration").value) : $("expiryDate").value;
     const priceRaw = $("itemPrice").value.trim();
+    const unitPriceRaw = $("itemUnitPrice").value.trim();
     const price = priceRaw === "" ? null : Number(priceRaw);
-    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || (price !== null && (!Number.isFinite(price) || price < 0)) || (hasExpiry && (!expiryDate || (mode === "duration" && !validDays($("expiryDuration").value))))) {
+    const unitPrice = unitPriceRaw === "" ? null : Number(unitPriceRaw);
+    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || (price !== null && (!Number.isFinite(price) || price < 0)) || (unitPrice !== null && (!Number.isFinite(unitPrice) || unitPrice < 0)) || (hasExpiry && (!expiryDate || (mode === "duration" && !validDays($("expiryDuration").value))))) {
       $("formError").textContent = text().durationHint;
       return;
     }
@@ -148,7 +152,7 @@
     try {
       const selectedPhoto = $("itemPhoto").files[0];
       const image = selectedPhoto ? await readImageFile(selectedPhoto) : $("itemPhoto").dataset.existing || "";
-      const record = {id,name,quantity,price,currency:$("itemCurrency").value.trim().slice(0,12)||"SYP",hasExpiry,unit:$("itemUnit").value,category:$("itemCategory").value || "Other",storageLocation:$("itemLocation").value,storageZone:$("itemZone").value,createdDate,expiryDate,notes:$("itemNotes").value.trim(),image,updatedAt:new Date().toISOString()};
+      const record = {id,name,quantity,price,packagePrice:price,unitPrice,currency:$("itemCurrency").value.trim().slice(0,12)||"SYP",hasExpiry,unit:$("itemUnit").value,category:$("itemCategory").value || "Other",storageLocation:$("itemLocation").value,storageZone:$("itemZone").value,createdDate,expiryDate,notes:$("itemNotes").value.trim(),image,updatedAt:new Date().toISOString()};
       if ($("itemId").value) await persistUpdatedRecord(record, expectedUpdatedAt);
       else await persistNewRecord(record);
       activeLocation = record.storageLocation;
@@ -180,8 +184,10 @@
     const hasExpiry = $("quickHasExpiry").checked;
     const expiryDate = !hasExpiry ? "" : mode === "duration" ? calculated("", mode, createdDate, $("quickExpiryDuration").value) : $("quickExpiry").value;
     const priceRaw = $("quickPrice").value.trim();
+    const unitPriceRaw = $("quickUnitPrice").value.trim();
     const price = priceRaw === "" ? null : Number(priceRaw);
-    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || (price !== null && (!Number.isFinite(price) || price < 0)) || (hasExpiry && (!expiryDate || (mode === "duration" && !validDays($("quickExpiryDuration").value))))) {
+    const unitPrice = unitPriceRaw === "" ? null : Number(unitPriceRaw);
+    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || (price !== null && (!Number.isFinite(price) || price < 0)) || (unitPrice !== null && (!Number.isFinite(unitPrice) || unitPrice < 0)) || (hasExpiry && (!expiryDate || (mode === "duration" && !validDays($("quickExpiryDuration").value))))) {
       $("quickName").focus();
       return;
     }
@@ -190,7 +196,7 @@
       return;
     }
     const location = $("quickLocation").value;
-    const record = {id:makeId(),name,quantity,price,currency:$("quickCurrency").value.trim().slice(0,12)||"SYP",hasExpiry,unit:$("quickUnit").value,category:$("quickCategory").value || "Other",storageLocation:location,storageZone:zonesFor(location)[0],createdDate,expiryDate,notes:"",updatedAt:new Date().toISOString()};
+    const record = {id:makeId(),name,quantity,price,packagePrice:price,unitPrice,currency:$("quickCurrency").value.trim().slice(0,12)||"SYP",hasExpiry,unit:$("quickUnit").value,category:$("quickCategory").value || "Other",storageLocation:location,storageZone:zonesFor(location)[0],createdDate,expiryDate,notes:"",updatedAt:new Date().toISOString()};
     const button = $("quickSave");
     button.disabled = true;
     try {
