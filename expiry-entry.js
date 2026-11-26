@@ -39,6 +39,13 @@
   function updateFull() {
     const mode = $("expiryMode")?.value || "date";
     const dateWrap = $("expiryDateWrap"), durationWrap = $("expiryDurationWrap");
+    const enabled = $("hasExpiry")?.checked !== false;
+    $("expiryFields").hidden = !enabled;
+    $("expiryDate").disabled = !enabled || mode === "duration";
+    $("expiryDuration").disabled = !enabled || mode !== "duration";
+    $("expiryDate").required = enabled && mode !== "duration";
+    $("expiryDuration").required = enabled && mode === "duration";
+    if (!enabled) { $("expiryCalculated").textContent = ""; return; }
     if (!dateWrap || !durationWrap) return;
     const duration = mode === "duration";
     dateWrap.hidden = duration;
@@ -53,6 +60,13 @@
   function updateQuick() {
     const mode = $("quickExpiryMode")?.value || "date";
     const dateWrap = $("quickExpiryDateWrap"), durationWrap = $("quickExpiryDurationWrap");
+    const enabled = $("quickHasExpiry")?.checked !== false;
+    $("quickExpiryFields").hidden = !enabled;
+    $("quickExpiry").disabled = !enabled || mode === "duration";
+    $("quickExpiryDuration").disabled = !enabled || mode !== "duration";
+    $("quickExpiry").required = enabled && mode !== "duration";
+    $("quickExpiryDuration").required = enabled && mode === "duration";
+    if (!enabled) { $("quickExpiryCalculated").textContent = ""; return; }
     if (!dateWrap || !durationWrap) return;
     const duration = mode === "duration";
     dateWrap.hidden = duration;
@@ -70,6 +84,9 @@
       originalOpenItem(item);
       $("expiryMode").value = "date";
       $("expiryDuration").value = "";
+      $("hasExpiry").checked = item?.hasExpiry !== false && Boolean(item?.expiryDate);
+      $("itemPrice").value = item?.price ?? "";
+      $("itemCurrency").value = item?.currency || "SYP";
       updateFull();
     };
   }
@@ -79,10 +96,15 @@
       originalOpenQuickAdd();
       $("quickExpiryMode").value = "date";
       $("quickExpiryDuration").value = "";
+      $("quickHasExpiry").checked = true;
+      $("quickPrice").value = "";
+      $("quickCurrency").value = "SYP";
       updateQuick();
     };
   }
   $("expiryMode")?.addEventListener("change", updateFull);
+  $("hasExpiry")?.addEventListener("change", updateFull);
+  $("quickHasExpiry")?.addEventListener("change", updateQuick);
   $("expiryDuration")?.addEventListener("input", updateFull);
   $("createdDate")?.addEventListener("change", updateFull);
   $("quickExpiryMode")?.addEventListener("change", updateQuick);
@@ -107,12 +129,15 @@
     const quantity = Number($("itemQuantity").value);
     const createdDate = $("createdDate").value;
     const mode = $("expiryMode").value;
-    const expiryDate = mode === "duration" ? calculated("", mode, createdDate, $("expiryDuration").value) : $("expiryDate").value;
-    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || !expiryDate || (mode === "duration" && !validDays($("expiryDuration").value))) {
+    const hasExpiry = $("hasExpiry").checked;
+    const expiryDate = !hasExpiry ? "" : mode === "duration" ? calculated("", mode, createdDate, $("expiryDuration").value) : $("expiryDate").value;
+    const priceRaw = $("itemPrice").value.trim();
+    const price = priceRaw === "" ? null : Number(priceRaw);
+    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || (price !== null && (!Number.isFinite(price) || price < 0)) || (hasExpiry && (!expiryDate || (mode === "duration" && !validDays($("expiryDuration").value))))) {
       $("formError").textContent = text().durationHint;
       return;
     }
-    if (expiryDate < createdDate) {
+    if (hasExpiry && expiryDate < createdDate) {
       $("formError").textContent = t("dateError");
       return;
     }
@@ -123,7 +148,7 @@
     try {
       const selectedPhoto = $("itemPhoto").files[0];
       const image = selectedPhoto ? await readImageFile(selectedPhoto) : $("itemPhoto").dataset.existing || "";
-      const record = {id,name,quantity,unit:$("itemUnit").value,category:$("itemCategory").value || "Other",storageLocation:$("itemLocation").value,storageZone:$("itemZone").value,createdDate,expiryDate,notes:$("itemNotes").value.trim(),image,updatedAt:new Date().toISOString()};
+      const record = {id,name,quantity,price,currency:$("itemCurrency").value.trim().slice(0,12)||"SYP",hasExpiry,unit:$("itemUnit").value,category:$("itemCategory").value || "Other",storageLocation:$("itemLocation").value,storageZone:$("itemZone").value,createdDate,expiryDate,notes:$("itemNotes").value.trim(),image,updatedAt:new Date().toISOString()};
       if ($("itemId").value) await persistUpdatedRecord(record, expectedUpdatedAt);
       else await persistNewRecord(record);
       activeLocation = record.storageLocation;
@@ -152,17 +177,20 @@
     const quantity = Number($("quickQuantity").value);
     const createdDate = $("quickCreatedDate").value;
     const mode = $("quickExpiryMode").value;
-    const expiryDate = mode === "duration" ? calculated("", mode, createdDate, $("quickExpiryDuration").value) : $("quickExpiry").value;
-    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || !expiryDate || (mode === "duration" && !validDays($("quickExpiryDuration").value))) {
+    const hasExpiry = $("quickHasExpiry").checked;
+    const expiryDate = !hasExpiry ? "" : mode === "duration" ? calculated("", mode, createdDate, $("quickExpiryDuration").value) : $("quickExpiry").value;
+    const priceRaw = $("quickPrice").value.trim();
+    const price = priceRaw === "" ? null : Number(priceRaw);
+    if (!name || !Number.isFinite(quantity) || quantity < 0 || !createdDate || (price !== null && (!Number.isFinite(price) || price < 0)) || (hasExpiry && (!expiryDate || (mode === "duration" && !validDays($("quickExpiryDuration").value))))) {
       $("quickName").focus();
       return;
     }
-    if (expiryDate < createdDate) {
+    if (hasExpiry && expiryDate < createdDate) {
       showToast(t("dateError"));
       return;
     }
     const location = $("quickLocation").value;
-    const record = {id:makeId(),name,quantity,unit:$("quickUnit").value,category:$("quickCategory").value || "Other",storageLocation:location,storageZone:zonesFor(location)[0],createdDate,expiryDate,notes:"",updatedAt:new Date().toISOString()};
+    const record = {id:makeId(),name,quantity,price,currency:$("quickCurrency").value.trim().slice(0,12)||"SYP",hasExpiry,unit:$("quickUnit").value,category:$("quickCategory").value || "Other",storageLocation:location,storageZone:zonesFor(location)[0],createdDate,expiryDate,notes:"",updatedAt:new Date().toISOString()};
     const button = $("quickSave");
     button.disabled = true;
     try {
