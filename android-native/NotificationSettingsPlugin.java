@@ -10,6 +10,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
+import org.json.JSONArray;
+
+import java.util.concurrent.TimeUnit;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -52,6 +62,44 @@ public class NotificationSettingsPlugin extends Plugin {
             call.resolve(result);
         } catch (Exception error) {
             call.reject("Unable to create the Redro alarm notification channel", error);
+        }
+    }
+
+    @PluginMethod
+    public void syncInventoryBackground(PluginCall call) {
+        try {
+            JSONArray items = call.getArray("items");
+            if (items == null) items = new JSONArray();
+            String language = call.getString("language", "ar");
+            getContext().getSharedPreferences("redro_background_inventory", Context.MODE_PRIVATE)
+                .edit()
+                .putString("items", items.toString())
+                .putString("language", language)
+                .apply();
+
+            WorkManager workManager = WorkManager.getInstance(getContext());
+            PeriodicWorkRequest periodic = new PeriodicWorkRequest.Builder(
+                InventoryExpiryWorker.class, 15, TimeUnit.MINUTES
+            ).build();
+            workManager.enqueueUniquePeriodicWork(
+                "redro-background-expiry-check",
+                ExistingPeriodicWorkPolicy.KEEP,
+                periodic
+            );
+
+            OneTimeWorkRequest immediate = new OneTimeWorkRequest.Builder(InventoryExpiryWorker.class).build();
+            workManager.enqueueUniqueWork(
+                "redro-background-expiry-check-now",
+                ExistingWorkPolicy.REPLACE,
+                immediate
+            );
+
+            JSObject result = new JSObject();
+            result.put("scheduled", true);
+            result.put("intervalMinutes", 15);
+            call.resolve(result);
+        } catch (Exception error) {
+            call.reject("Unable to schedule Redro background inventory checks", error);
         }
     }
 
