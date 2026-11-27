@@ -82,6 +82,7 @@
   if (typeof originalOpenItem === "function") {
     window.openItem = function(item) {
       delete $("itemId").dataset.restockAmount;
+      delete $("itemId").dataset.restockHasExpiry;
       delete $("itemId").dataset.restockOldExpiry;
       delete $("itemId").dataset.restockOldCreated;
       originalOpenItem(item);
@@ -148,14 +149,15 @@
       $("formError").textContent = t("dateError");
       return;
     }
+    const restockHasExpiry=$("itemId").dataset.restockHasExpiry==="true";
     const restockOldExpiry=$("itemId").dataset.restockOldExpiry||"";
     const restockOldCreated=$("itemId").dataset.restockOldCreated||"";
-    if(restockOldExpiry && hasExpiry && (expiryDate===restockOldExpiry || createdDate===restockOldCreated)){
-      $("formError").textContent=language()==="ar"?"لإعادة تعبئة هذه المادة، يجب إدخال تاريخ إنتاج/تحضير جديد وتاريخ انتهاء جديد للدفعة الجديدة.":"To restock this item, enter a new production/preparation date and a new expiry date for the new batch.";
+    if(restockHasExpiry && (!hasExpiry || !expiryDate)){
+      $("formError").textContent=language()==="ar"?"هذه المادة تتطلب متابعة الصلاحية. أدخل تاريخ الإنتاج/التحضير وتاريخ الانتهاء للدفعة الجديدة.":"This item requires expiry tracking. Enter production/preparation and expiry dates for the new batch.";
       return;
     }
-    if(restockOldExpiry && !hasExpiry){
-      $("formError").textContent=language()==="ar"?"لا يمكن إلغاء متابعة الصلاحية أثناء إعادة التعبئة. حدّث تاريخ الانتهاء بدلاً من ذلك.":"Expiry tracking cannot be disabled during restocking. Update the expiry date instead.";
+    if(restockHasExpiry && (expiryDate===restockOldExpiry || createdDate===restockOldCreated)){
+      $("formError").textContent=language()==="ar"?"يجب تحديث تاريخ الإنتاج/التحضير وتاريخ الانتهاء للدفعة الجديدة قبل إعادة التعبئة.":"Update both the production/preparation date and expiry date for the new batch before restocking.";
       return;
     }
     const id = $("itemId").value || makeId();
