@@ -24,3 +24,18 @@
 .quick-add-heading strong{font-size:17px}
 .quick-save{min-height:50px;margin-top:4px;font-size:14px}
 @media(max-width:420px){.quick-add{padding:12px}.quick-form-section,.form-section{padding:11px}.quick-price-grid,.price-fields{grid-template-columns:1fr}.quick-price-grid .currency-field,.price-fields .currency-field{grid-column:auto}.quick-date-fields{grid-template-columns:1fr}.app-dialog{padding:15px}.dialog-header h2{font-size:19px}}
+
+
+.background-setup{display:grid;gap:12px;margin-top:16px;padding:16px;border:1px solid var(--border-color,#dfe6e2);border-radius:16px;background:var(--surface-soft,#f5f8f6)}
+.background-setup>strong{font-size:1rem;color:var(--text-primary,#183b2c)}
+.background-setup>p{margin:0;color:var(--text-secondary,#68736d);font-size:.88rem;line-height:1.6}
+.background-setup-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid var(--border-color,#e1e7e3);border-radius:12px;background:var(--surface,#fff)}
+.background-setup-row>div{display:grid;gap:5px;min-width:0}
+.background-setup-row strong{font-size:.9rem}
+.background-setup-row small{color:var(--text-secondary,#68736d);line-height:1.45}
+.setup-state{font-size:.78rem;font-weight:700}
+.setup-state.is-ready{color:#16834f}
+.setup-state.needs-action{color:#b7791f}
+.background-setup-row button{flex-shrink:0;white-space:nowrap}
+.background-setup>.text-button{justify-self:start}
+@media(max-width:420px){.background-setup-row{align-items:flex-start;flex-direction:column}.background-setup-row button{width:100%}}
