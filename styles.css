@@ -5,3 +5,22 @@
 .expiry-toggle>span,.quick-field>label{display:flex;align-items:center;gap:10px}.expiry-toggle input,.quick-field>label input{width:20px;height:20px;accent-color:var(--accent,#23864b)}#expiryFields[hidden],#quickExpiryFields[hidden]{display:none!important}.field-row input[type=number],.field-row input[type=text]{width:100%}
 
 .item-actions{display:flex;flex-wrap:wrap;gap:5px;align-items:center}.item-actions .mini-button{min-width:34px;min-height:34px}.item-actions .stock-decrease{font-weight:900;color:var(--red);border-color:#e9b9bd}.item-actions .stock-restock{font-size:11px;padding:0 8px;width:auto;min-width:64px}.activity-report-list{display:grid;gap:9px;max-height:min(58vh,520px);overflow:auto}.activity-report-row{padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}.activity-report-row strong{display:block;font-size:13px}.activity-report-row p{margin:5px 0;color:var(--muted);font-size:12px;line-height:1.6}.activity-report-row time{color:var(--muted);font-size:10px}.item-meta .item-price,.item-meta .item-unit-price{font-weight:700;color:var(--green)}#reportToggle{white-space:nowrap}
+
+.quick-form-section,.form-section{margin:14px 0;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
+.quick-section-title,.form-section-title{margin:0 0 12px;font-size:13px;font-weight:800;color:var(--green)}
+.quick-price-grid,.price-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.quick-price-grid .quick-field,.price-fields .field-label{margin:0;min-width:0}
+.quick-price-grid .currency-field,.price-fields .currency-field{grid-column:1/-1}
+.quick-price-grid input,.price-fields input{width:100%;min-height:46px}
+.quick-add-fields>.quick-field,.quick-date-fields>.quick-field{min-width:0}
+.quick-date-fields{align-items:start}
+.expiry-quick-card{padding:11px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+.expiry-checkbox{display:flex;align-items:center;gap:8px;min-height:28px}
+.expiry-checkbox input{width:19px;height:19px;accent-color:var(--green)}
+#quickExpiryFields{display:grid;gap:8px;margin-top:8px}
+#quickExpiryFields[hidden]{display:none!important}
+#quickExpiryDateWrap[hidden],#quickExpiryDurationWrap[hidden]{display:none!important}
+.quick-add-heading{padding-bottom:10px;border-bottom:1px solid var(--line)}
+.quick-add-heading strong{font-size:17px}
+.quick-save{min-height:50px;margin-top:4px;font-size:14px}
+@media(max-width:420px){.quick-add{padding:12px}.quick-form-section,.form-section{padding:11px}.quick-price-grid,.price-fields{grid-template-columns:1fr}.quick-price-grid .currency-field,.price-fields .currency-field{grid-column:auto}.quick-date-fields{grid-template-columns:1fr}.app-dialog{padding:15px}.dialog-header h2{font-size:19px}}
