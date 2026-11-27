@@ -6,11 +6,11 @@
   const lang = () => document.documentElement.lang || "ar";
   const strings = {
     ar:{
-      date:"التاريخ",notifications:"الإشعارات",notificationDesc:"فعّل الإشعارات مرة واحدة. سيجدول Android التنبيهات مسبقاً، وستصلك حتى عندما تغلق التطبيق أو لا تستخدمه. لا يلزم إبقاء التطبيق مفتوحاً.",inventory:"المخزون",search:"ابحث عن مادة...",itemName:"اسم المادة",group:"المجموعة",storage:"مكان التخزين",quantity:"الكمية المتوفرة",unit:"وحدة القياس",created:"تاريخ الإنتاج أو التحضير",expiry:"تاريخ الانتهاء",expiryInfo:"طريقة تحديد الصلاحية",packagePrice:"سعر العبوة / الباكيج الكامل",unitPrice:"سعر القطعة أو الوحدة الواحدة",currency:"العملة",expiryDays:"مدة الصلاحية بالأيام",photo:"الصورة",notes:"ملاحظات",other:"أخرى",close:"إغلاق",cancel:"إلغاء",save:"حفظ المادة",
+      date:"التاريخ",notifications:"الإشعارات",notificationDesc:"فعّل الإشعارات واسمح للتطبيق بالعمل في الخلفية. يفحص Android المخزون دورياً حتى عند إغلاق التطبيق، لكن قد يؤخر الفحص بسبب توفير الطاقة أو إيقاف التطبيق إجبارياً.",inventory:"المخزون",search:"ابحث عن مادة...",itemName:"اسم المادة",group:"المجموعة",storage:"مكان التخزين",quantity:"الكمية المتوفرة",unit:"وحدة القياس",created:"تاريخ الإنتاج أو التحضير",expiry:"تاريخ الانتهاء",expiryInfo:"طريقة تحديد الصلاحية",packagePrice:"سعر العبوة / الباكيج الكامل",unitPrice:"سعر القطعة أو الوحدة الواحدة",currency:"العملة",expiryDays:"مدة الصلاحية بالأيام",photo:"الصورة",notes:"ملاحظات",other:"أخرى",close:"إغلاق",cancel:"إلغاء",save:"حفظ المادة",
       enable:"تفعيل الإشعارات",test:"اختبار الإشعارات",enabled:"الإشعارات مفعّلة على هذا الجهاز.",disabled:"الإشعارات غير مفعّلة. افتح إعدادات التطبيق واسمح بالإشعارات.",unsupported:"ميزة الإشعارات الأصلية متاحة في نسخة Android المثبتة.",permission:"لم يتم منح إذن الإشعارات.",testTitle:"اختبار إشعارات Redro",testBody:"نجح اختبار الإشعارات والصوت.",threeDaysTitle:"تذكير بانتهاء الصلاحية",threeDaysBody:"بقي 3 أيام على انتهاء صلاحية {name}.",twoDaysTitle:"تذكير بانتهاء الصلاحية",twoDaysBody:"بقي يومان على انتهاء صلاحية {name}.",expiredTitle:"تحذير: منتج منتهي الصلاحية",expiredBody:"انتهت صلاحية {name}.",testDone:"تم إرسال إشعار الاختبار.",groupRename:"تعديل اسم المجموعة",groupNew:"اسم المجموعة الجديد",groupRenamed:"تم تعديل اسم المجموعة.",groupNameEmpty:"اكتب اسماً للمجموعة.",groupExists:"توجد مجموعة بهذا الاسم بالفعل.",groupRenameError:"تعذر تعديل المجموعة. حاول مجدداً.",groupDelete:"حذف المجموعة",groupEdit:"تعديل المجموعة",openSettings:"افتح إعدادات التطبيق ثم الإشعارات واسمح بها.",notificationDenied:"الإذن غير مفعّل. انتقل إلى إعدادات الإشعارات لتفعيله."
     },
     en:{
-      date:"Date",notifications:"Notifications",notificationDesc:"Enable notifications once. Android schedules expiry reminders in advance and can deliver them while the app is closed. You do not need to keep Redro open.",inventory:"Inventory",search:"Search items...",itemName:"Item name",group:"Group",storage:"Storage location",quantity:"Available quantity",unit:"Measurement unit",created:"Production / preparation date",expiry:"Expiry date",expiryInfo:"Expiry setup",packagePrice:"Full package price",unitPrice:"Price per piece / unit",currency:"Currency",expiryDays:"Shelf life in days",photo:"Photo",notes:"Notes",other:"Other",close:"Close",cancel:"Cancel",save:"Save item",
+      date:"Date",notifications:"Notifications",notificationDesc:"Enable notifications and allow background activity. Android checks your inventory periodically while the app is closed, but battery restrictions or force-stop can delay or pause checks.",inventory:"Inventory",search:"Search items...",itemName:"Item name",group:"Group",storage:"Storage location",quantity:"Available quantity",unit:"Measurement unit",created:"Production / preparation date",expiry:"Expiry date",expiryInfo:"Expiry setup",packagePrice:"Full package price",unitPrice:"Price per piece / unit",currency:"Currency",expiryDays:"Shelf life in days",photo:"Photo",notes:"Notes",other:"Other",close:"Close",cancel:"Cancel",save:"Save item",
       enable:"Enable notifications",test:"Test notifications",enabled:"Notifications are enabled on this device.",disabled:"Notifications are disabled. Open app settings and allow notifications.",unsupported:"Native notifications are available in the installed Android app.",permission:"Notification permission was not granted.",testTitle:"Redro notification test",testBody:"Notification and sound test successful.",threeDaysTitle:"Expiry reminder",threeDaysBody:"{name} expires in 3 days.",twoDaysTitle:"Expiry reminder",twoDaysBody:"{name} expires in 2 days.",expiredTitle:"Expired item warning",expiredBody:"{name} has expired.",testDone:"Test notification sent.",groupRename:"Rename group",groupNew:"New group name",groupRenamed:"Group name updated.",groupNameEmpty:"Enter a group name.",groupExists:"A group with this name already exists.",groupRenameError:"Could not rename the group. Try again.",groupDelete:"Delete group",groupEdit:"Edit group",openSettings:"Open app settings, then Notifications, and allow notifications.",notificationDenied:"Permission is disabled. Open notification settings to enable it."
     },
     zh:{
@@ -214,8 +214,9 @@
   }
   async function syncNotifications(items) {
     const plugin = native();
-    if (!plugin || !(await permissionState(plugin))) return;
-    await createChannel(plugin);
+    if (!plugin) return;
+    const permissionGranted = await permissionState(plugin);
+    if (permissionGranted) await createChannel(plugin);
     const oldPlan = readPlan();
     const settings = SETTINGS_PLUGIN();
     if (settings && typeof settings.syncInventoryBackground === "function") {
@@ -246,6 +247,7 @@
       return result;
     }
 
+    if (!permissionGranted) return;
     const nextPlan = {};
     const schedules = [];
     const validIds = new Set();
