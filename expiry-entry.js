@@ -145,6 +145,16 @@
       $("formError").textContent = t("dateError");
       return;
     }
+    const restockOldExpiry=$("itemId").dataset.restockOldExpiry||"";
+    const restockOldCreated=$("itemId").dataset.restockOldCreated||"";
+    if(restockOldExpiry && hasExpiry && (expiryDate===restockOldExpiry || createdDate===restockOldCreated)){
+      $("formError").textContent=language()==="ar"?"لإعادة تعبئة هذه المادة، يجب إدخال تاريخ إنتاج/تحضير جديد وتاريخ انتهاء جديد للدفعة الجديدة.":"To restock this item, enter a new production/preparation date and a new expiry date for the new batch.";
+      return;
+    }
+    if(restockOldExpiry && !hasExpiry){
+      $("formError").textContent=language()==="ar"?"لا يمكن إلغاء متابعة الصلاحية أثناء إعادة التعبئة. حدّث تاريخ الانتهاء بدلاً من ذلك.":"Expiry tracking cannot be disabled during restocking. Update the expiry date instead.";
+      return;
+    }
     const id = $("itemId").value || makeId();
     const submit = $("itemForm").querySelector('button[type="submit"]');
     const expectedUpdatedAt = $("itemId").dataset.expectedUpdatedAt || "";
@@ -155,6 +165,9 @@
       const record = {id,name,quantity,price,packagePrice:price,unitPrice,currency:$("itemCurrency").value.trim().slice(0,12)||"SYP",hasExpiry,unit:$("itemUnit").value,category:$("itemCategory").value || "Other",storageLocation:$("itemLocation").value,storageZone:$("itemZone").value,createdDate,expiryDate,notes:$("itemNotes").value.trim(),image,updatedAt:new Date().toISOString()};
       if ($("itemId").value) await persistUpdatedRecord(record, expectedUpdatedAt);
       else await persistNewRecord(record);
+      delete $("itemId").dataset.restockAmount;
+      delete $("itemId").dataset.restockOldExpiry;
+      delete $("itemId").dataset.restockOldCreated;
       activeLocation = record.storageLocation;
       persistActiveLocation();
       announceInventoryChange();
