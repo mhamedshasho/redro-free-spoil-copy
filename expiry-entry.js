@@ -81,6 +81,9 @@
   const originalOpenItem = window.openItem;
   if (typeof originalOpenItem === "function") {
     window.openItem = function(item) {
+      delete $("itemId").dataset.restockAmount;
+      delete $("itemId").dataset.restockOldExpiry;
+      delete $("itemId").dataset.restockOldCreated;
       originalOpenItem(item);
       $("expiryMode").value = "date";
       $("expiryDuration").value = "";
