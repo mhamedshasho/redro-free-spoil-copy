@@ -72,11 +72,12 @@
       if(raw===null)return;
       const amount=Number(raw);
       if(!Number.isFinite(amount)||amount<=0){showToast(t("amountInvalid"));return;}
-      if(item.hasExpiry!==false&&item.expiryDate){
+      if(item.hasExpiry===true||Boolean(item.expiryDate)){
         openItem(item);
         $("itemQuantity").value=String(Number(item.quantity||0)+amount);
         $("itemId").dataset.restockAmount=String(amount);
-        $("itemId").dataset.restockOldExpiry=item.expiryDate;
+        $("itemId").dataset.restockHasExpiry="true";
+        $("itemId").dataset.restockOldExpiry=item.expiryDate||"";
         $("itemId").dataset.restockOldCreated=item.createdDate||"";
         $("formError").textContent=t("expiryRestockWarning");
         $("createdDate").focus();
