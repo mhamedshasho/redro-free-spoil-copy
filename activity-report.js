@@ -3,8 +3,8 @@
   const $ = id => document.getElementById(id);
   const language = () => document.documentElement.lang || "ar";
   const labels = {
-    ar:{added:"إضافة مادة",edited:"تعديل مادة",decreased:"خصم وحدة",restocked:"إعادة تعبئة",deleted:"حذف مادة",zero:"الكمية صفر بالفعل",decrease:"− خصم وحدة",restock:"إعادة تعبئة",amount:"كمية إعادة التعبئة",amountInvalid:"أدخل كمية صحيحة أكبر من صفر.",restockDone:"تمت إعادة تعبئة المادة.",decreaseDone:"تم خصم وحدة واحدة.",reportEmpty:"لا توجد عمليات مسجلة بعد.",clear:"هل تريد مسح سجل التقارير؟",clearDone:"تم مسح سجل التقارير.",quantity:"الكمية",from:"من",to:"إلى",package:"سعر الحزمة",unitPrice:"سعر الوحدة"},
-    en:{added:"Item added",edited:"Item edited",decreased:"Unit deducted",restocked:"Stock replenished",deleted:"Item deleted",zero:"Quantity is already zero",decrease:"− Deduct one",restock:"Restock",amount:"Restock quantity",amountInvalid:"Enter a valid quantity greater than zero.",restockDone:"Stock replenished.",decreaseDone:"One unit deducted.",reportEmpty:"No activity recorded yet.",clear:"Clear the activity report?",clearDone:"Activity report cleared.",quantity:"Quantity",from:"from",to:"to",package:"Package price",unitPrice:"Unit price"}
+    ar:{added:"إضافة مادة",edited:"تعديل مادة",decreased:"خصم وحدة",restocked:"إعادة تعبئة",deleted:"حذف مادة",zero:"الكمية صفر بالفعل",decrease:"− خصم وحدة",restock:"إعادة تعبئة",amount:"كمية إعادة التعبئة",amountInvalid:"أدخل كمية صحيحة أكبر من صفر.",restockDone:"تمت إعادة تعبئة المادة.",decreaseDone:"تم خصم وحدة واحدة.",expiryRestockWarning:"هذه المادة لها تاريخ صلاحية. حدّث تاريخ الإنتاج وتاريخ الانتهاء للدفعة الجديدة قبل حفظ إعادة التعبئة.",reportEmpty:"لا توجد عمليات مسجلة بعد.",clear:"هل تريد مسح سجل التقارير؟",clearDone:"تم مسح سجل التقارير.",quantity:"الكمية",from:"من",to:"إلى",package:"سعر الحزمة",unitPrice:"سعر الوحدة"},
+    en:{added:"Item added",edited:"Item edited",decreased:"Unit deducted",restocked:"Stock replenished",deleted:"Item deleted",zero:"Quantity is already zero",decrease:"− Deduct one",restock:"Restock",amount:"Restock quantity",amountInvalid:"Enter a valid quantity greater than zero.",restockDone:"Stock replenished.",decreaseDone:"One unit deducted.",expiryRestockWarning:"This item has an expiry date. Update the production date and expiry date for the new batch before saving the restock.",reportEmpty:"No activity recorded yet.",clear:"Clear the activity report?",clearDone:"Activity report cleared.",quantity:"Quantity",from:"from",to:"to",package:"Package price",unitPrice:"Unit price"}
   };
   const t = key => (labels[language()] || labels.ar)[key] || labels.ar[key] || key;
   const read = () => { try { const data=JSON.parse(localStorage.getItem(KEY)||"[]"); return Array.isArray(data)?data:[]; } catch { return []; } };
@@ -72,6 +72,16 @@
       if(raw===null)return;
       const amount=Number(raw);
       if(!Number.isFinite(amount)||amount<=0){showToast(t("amountInvalid"));return;}
+      if(item.hasExpiry!==false&&item.expiryDate){
+        openItem(item);
+        $("itemQuantity").value=String(Number(item.quantity||0)+amount);
+        $("itemId").dataset.restockAmount=String(amount);
+        $("itemId").dataset.restockOldExpiry=item.expiryDate;
+        $("itemId").dataset.restockOldCreated=item.createdDate||"";
+        $("formError").textContent=t("expiryRestockWarning");
+        $("createdDate").focus();
+        return;
+      }
       updateQuantity(item.id,amount);
     }
   });
