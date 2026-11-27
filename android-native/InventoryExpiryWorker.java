@@ -20,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,13 +47,18 @@ public class InventoryExpiryWorker extends Worker {
             String language = prefs.getString("language", "ar");
             JSONArray items = new JSONArray(raw);
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager == null || !manager.areNotificationsEnabled()) return Result.success();
             ensureChannel(context, manager);
+            if (Build.VERSION.SDK_INT >= 26) {
+                NotificationChannel activeChannel = manager.getNotificationChannel(CHANNEL_ID);
+                if (activeChannel == null || activeChannel.getImportance() == NotificationManager.IMPORTANCE_NONE) return Result.success();
+            }
             Set<String> sent = new HashSet<>(prefs.getStringSet("sent", new HashSet<>()));
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             dateFormat.setLenient(false);
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-            String todayText = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
-            Date todayDate = dateFormat.parse(todayText);
+            dateFormat.setTimeZone(TimeZone.getDefault());
+            Calendar todayCalendar = Calendar.getInstance();
+            int todayOrdinal = utcDayOrdinal(todayCalendar.get(Calendar.YEAR), todayCalendar.get(Calendar.MONTH), todayCalendar.get(Calendar.DAY_OF_MONTH));
             boolean changed = false;
 
             for (int i = 0; i < items.length(); i++) {
@@ -66,8 +73,15 @@ public class InventoryExpiryWorker extends Worker {
                 Date expiryDate;
                 try { expiryDate = dateFormat.parse(expiry); }
                 catch (Exception ignored) { continue; }
-                if (expiryDate == null || todayDate == null) continue;
-                long days = java.util.concurrent.TimeUnit.MILLISECONDS.toDays(expiryDate.getTime() - todayDate.getTime());
+                if (expiryDate == null) continue;
+                Calendar expiryCalendar = Calendar.getInstance();
+                expiryCalendar.setTime(expiryDate);
+                int expiryOrdinal = utcDayOrdinal(
+                    expiryCalendar.get(Calendar.YEAR),
+                    expiryCalendar.get(Calendar.MONTH),
+                    expiryCalendar.get(Calendar.DAY_OF_MONTH)
+                );
+                long days = (long) expiryOrdinal - todayOrdinal;
                 String kind = days == 3 ? "three" : days == 2 ? "two" : days <= 0 ? "expired" : "";
                 if (kind.isEmpty()) continue;
 
@@ -119,6 +133,13 @@ public class InventoryExpiryWorker extends Worker {
             android.util.Log.e("RedroExpiryWorker", "Background expiry check failed", error);
             return Result.retry();
         }
+    }
+
+    private static int utcDayOrdinal(int year, int month, int day) {
+        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"), Locale.US);
+        calendar.clear();
+        calendar.set(year, month, day, 0, 0, 0);
+        return (int) (calendar.getTimeInMillis() / 86400000L);
     }
 
     private static void ensureChannel(Context context, NotificationManager manager) {
