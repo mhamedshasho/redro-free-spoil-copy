@@ -383,7 +383,7 @@
   $("notificationSettingsDescription")?.insertAdjacentElement("afterend",setupHost);
   $("enableNotifications")?.addEventListener("click",enableNotifications);
   $("testNotifications")?.addEventListener("click",testNotifications);
-  $("languageSelect")?.addEventListener("change",updateLabels);
+  $("languageSelect")?.addEventListener("change",()=>{updateLabels();renderBackgroundSetup();});
   $("settingsToggle")?.addEventListener("click",()=>setTimeout(()=>{refreshPermissionStatus();renderBackgroundSetup();},250));
   window.addEventListener("redro-time-updated",updateDate);
   window.addEventListener("focus",()=>{refreshPermissionStatus();renderBackgroundSetup();});
