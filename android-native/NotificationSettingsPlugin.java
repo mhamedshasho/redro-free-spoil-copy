@@ -104,6 +104,84 @@ public class NotificationSettingsPlugin extends Plugin {
         }
     }
 
+
+    @PluginMethod
+    public void getSetupStatus(PluginCall call) {
+        try {
+            Context context = getContext();
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            android.os.PowerManager power = (android.os.PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            JSObject result = new JSObject();
+            result.put("notificationsEnabled", manager != null && manager.areNotificationsEnabled());
+            result.put("batteryUnrestricted", Build.VERSION.SDK_INT < Build.VERSION_CODES.M || (power != null && power.isIgnoringBatteryOptimizations(context.getPackageName())));
+            result.put("manufacturer", Build.MANUFACTURER == null ? "" : Build.MANUFACTURER.toLowerCase(java.util.Locale.US));
+            result.put("sdk", Build.VERSION.SDK_INT);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && manager != null) {
+                NotificationChannel channel = manager.getNotificationChannel(ALARM_CHANNEL_ID);
+                result.put("channelEnabled", channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE);
+            } else {
+                result.put("channelEnabled", true);
+            }
+            call.resolve(result);
+        } catch (Exception error) {
+            call.reject("Unable to read Android setup status", error);
+        }
+    }
+
+    @PluginMethod
+    public void openSetupPage(PluginCall call) {
+        String page = call.getString("page", "app");
+        try {
+            Intent intent;
+            if ("notifications".equals(page)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                    intent.putExtra(Settings.EXTRA_APP_PACKAGE, getContext().getPackageName());
+                } else {
+                    intent = appDetailsIntent();
+                }
+            } else if ("battery".equals(page)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                } else {
+                    intent = appDetailsIntent();
+                }
+            } else if ("autostart".equals(page)) {
+                intent = new Intent("miui.intent.action.OP_AUTO_START");
+                intent.setPackage("com.miui.securitycenter");
+                if (intent.resolveActivity(getContext().getPackageManager()) == null) {
+                    intent = appDetailsIntent();
+                }
+            } else {
+                intent = appDetailsIntent();
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(intent);
+            JSObject result = new JSObject();
+            result.put("opened", true);
+            result.put("page", page);
+            call.resolve(result);
+        } catch (Exception error) {
+            try {
+                Intent fallback = appDetailsIntent();
+                fallback.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(fallback);
+                JSObject result = new JSObject();
+                result.put("opened", true);
+                result.put("page", "app");
+                call.resolve(result);
+            } catch (Exception fallbackError) {
+                call.reject("Unable to open Android settings", fallbackError);
+            }
+        }
+    }
+
+    private Intent appDetailsIntent() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.parse("package:" + getContext().getPackageName()));
+        return intent;
+    }
+
     @PluginMethod
     public void open(PluginCall call) {
         try {
