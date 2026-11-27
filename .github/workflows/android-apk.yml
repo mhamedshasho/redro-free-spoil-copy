@@ -49,6 +49,20 @@ jobs:
         run: npm run build
       - name: Add Android platform
         run: npx cap add android
+      - name: Set increasing Android version code
+        env:
+          ANDROID_VERSION_CODE: ${{ github.run_number }}
+        run: |
+          python3 - <<'PY'
+          import os, re
+          from pathlib import Path
+          p = Path("android/app/build.gradle")
+          s = p.read_text()
+          s, count = re.subn(r'versionCode\s+\d+', 'versionCode ' + os.environ["ANDROID_VERSION_CODE"], s, count=1)
+          if count != 1:
+              raise SystemExit("Could not set Android versionCode")
+          p.write_text(s)
+          PY
       - name: Sync native plugins
         run: npx cap sync android
       - name: Add native notification settings bridge
