@@ -7,11 +7,11 @@
   const strings = {
     ar:{
       date:"التاريخ",notifications:"الإشعارات",notificationDesc:"فعّل الإشعارات واسمح للتطبيق بالعمل في الخلفية. يفحص Android المخزون دورياً حتى عند إغلاق التطبيق، لكن قد يؤخر الفحص بسبب توفير الطاقة أو إيقاف التطبيق إجبارياً.",inventory:"المخزون",search:"ابحث عن مادة...",itemName:"اسم المادة",group:"المجموعة",storage:"مكان التخزين",quantity:"الكمية المتوفرة",unit:"وحدة القياس",created:"تاريخ الإنتاج أو التحضير",expiry:"تاريخ الانتهاء",expiryInfo:"طريقة تحديد الصلاحية",packagePrice:"سعر العبوة / الباكيج الكامل",unitPrice:"سعر القطعة أو الوحدة الواحدة",currency:"العملة",expiryDays:"مدة الصلاحية بالأيام",photo:"الصورة",notes:"ملاحظات",other:"أخرى",close:"إغلاق",cancel:"إلغاء",save:"حفظ المادة",
-      enable:"تفعيل الإشعارات",test:"اختبار الإشعارات",enabled:"الإشعارات مفعّلة على هذا الجهاز.",disabled:"الإشعارات غير مفعّلة. افتح إعدادات التطبيق واسمح بالإشعارات.",unsupported:"ميزة الإشعارات الأصلية متاحة في نسخة Android المثبتة.",permission:"لم يتم منح إذن الإشعارات.",testTitle:"اختبار إشعارات Redro",testBody:"نجح اختبار الإشعارات والصوت.",threeDaysTitle:"تذكير بانتهاء الصلاحية",threeDaysBody:"بقي 3 أيام على انتهاء صلاحية {name}.",twoDaysTitle:"تذكير بانتهاء الصلاحية",twoDaysBody:"بقي يومان على انتهاء صلاحية {name}.",expiredTitle:"تحذير: منتج منتهي الصلاحية",expiredBody:"انتهت صلاحية {name}.",testDone:"تم إرسال إشعار الاختبار.",groupRename:"تعديل اسم المجموعة",groupNew:"اسم المجموعة الجديد",groupRenamed:"تم تعديل اسم المجموعة.",groupNameEmpty:"اكتب اسماً للمجموعة.",groupExists:"توجد مجموعة بهذا الاسم بالفعل.",groupRenameError:"تعذر تعديل المجموعة. حاول مجدداً.",groupDelete:"حذف المجموعة",groupEdit:"تعديل المجموعة",openSettings:"افتح إعدادات التطبيق ثم الإشعارات واسمح بها.",notificationDenied:"الإذن غير مفعّل. انتقل إلى إعدادات الإشعارات لتفعيله."
+      enable:"تفعيل الإشعارات",test:"اختبار الإشعارات",enabled:"الإشعارات مفعّلة على هذا الجهاز.",disabled:"الإشعارات غير مفعّلة. افتح إعدادات التطبيق واسمح بالإشعارات.",unsupported:"ميزة الإشعارات الأصلية متاحة في نسخة Android المثبتة.",permission:"لم يتم منح إذن الإشعارات.",testTitle:"اختبار إشعارات Redro",testBody:"نجح اختبار الإشعارات والصوت.",threeDaysTitle:"تذكير بانتهاء الصلاحية",threeDaysBody:"بقي 3 أيام على انتهاء صلاحية {name}.",twoDaysTitle:"تذكير بانتهاء الصلاحية",twoDaysBody:"بقي يومان على انتهاء صلاحية {name}.",expiredTitle:"تحذير: منتج منتهي الصلاحية",expiredBody:"انتهت صلاحية {name}.",testDone:"تم إرسال إشعار الاختبار.",groupRename:"تعديل اسم المجموعة",groupNew:"اسم المجموعة الجديد",groupRenamed:"تم تعديل اسم المجموعة.",groupNameEmpty:"اكتب اسماً للمجموعة.",groupExists:"توجد مجموعة بهذا الاسم بالفعل.",groupRenameError:"تعذر تعديل المجموعة. حاول مجدداً.",groupDelete:"حذف المجموعة",groupEdit:"تعديل المجموعة",openSettings:"افتح إعدادات التطبيق ثم الإشعارات واسمح بها.",notificationDenied:"الإذن غير مفعّل. انتقل إلى إعدادات الإشعارات لتفعيله.",setupTitle:"إعداد التشغيل الكامل",setupDescription:"اضبط الأذونات التالية ليتمكن Android من إرسال تنبيهات الصلاحية في الخلفية. بعد تغيير أي إعداد ارجع إلى هنا لتحديث الحالة.",setupNotifications:"السماح بالإشعارات",setupBattery:"السماح بالعمل دون تقييد البطارية",setupAutostart:"السماح بالتشغيل التلقائي",statusReady:"مفعّل",statusNeedsAction:"يتطلب ضبطاً",statusManual:"تحقق يدوياً",openSetting:"فتح الإعدادات",refreshSetup:"إعادة فحص الإعدادات",setupUnsupported:"هذه الإعدادات متاحة في تطبيق Android المثبّت فقط.",batteryHelp:"اختر بلا قيود أو عدم التقييد إذا ظهر الخيار.",autostartHelp:"على Xiaomi وRedmi وPOCO فعّل التشغيل التلقائي من صفحة الأمان. قد يختلف اسم الخيار حسب إصدار النظام."
     },
     en:{
       date:"Date",notifications:"Notifications",notificationDesc:"Enable notifications and allow background activity. Android checks your inventory periodically while the app is closed, but battery restrictions or force-stop can delay or pause checks.",inventory:"Inventory",search:"Search items...",itemName:"Item name",group:"Group",storage:"Storage location",quantity:"Available quantity",unit:"Measurement unit",created:"Production / preparation date",expiry:"Expiry date",expiryInfo:"Expiry setup",packagePrice:"Full package price",unitPrice:"Price per piece / unit",currency:"Currency",expiryDays:"Shelf life in days",photo:"Photo",notes:"Notes",other:"Other",close:"Close",cancel:"Cancel",save:"Save item",
-      enable:"Enable notifications",test:"Test notifications",enabled:"Notifications are enabled on this device.",disabled:"Notifications are disabled. Open app settings and allow notifications.",unsupported:"Native notifications are available in the installed Android app.",permission:"Notification permission was not granted.",testTitle:"Redro notification test",testBody:"Notification and sound test successful.",threeDaysTitle:"Expiry reminder",threeDaysBody:"{name} expires in 3 days.",twoDaysTitle:"Expiry reminder",twoDaysBody:"{name} expires in 2 days.",expiredTitle:"Expired item warning",expiredBody:"{name} has expired.",testDone:"Test notification sent.",groupRename:"Rename group",groupNew:"New group name",groupRenamed:"Group name updated.",groupNameEmpty:"Enter a group name.",groupExists:"A group with this name already exists.",groupRenameError:"Could not rename the group. Try again.",groupDelete:"Delete group",groupEdit:"Edit group",openSettings:"Open app settings, then Notifications, and allow notifications.",notificationDenied:"Permission is disabled. Open notification settings to enable it."
+      enable:"Enable notifications",test:"Test notifications",enabled:"Notifications are enabled on this device.",disabled:"Notifications are disabled. Open app settings and allow notifications.",unsupported:"Native notifications are available in the installed Android app.",permission:"Notification permission was not granted.",testTitle:"Redro notification test",testBody:"Notification and sound test successful.",threeDaysTitle:"Expiry reminder",threeDaysBody:"{name} expires in 3 days.",twoDaysTitle:"Expiry reminder",twoDaysBody:"{name} expires in 2 days.",expiredTitle:"Expired item warning",expiredBody:"{name} has expired.",testDone:"Test notification sent.",groupRename:"Rename group",groupNew:"New group name",groupRenamed:"Group name updated.",groupNameEmpty:"Enter a group name.",groupExists:"A group with this name already exists.",groupRenameError:"Could not rename the group. Try again.",groupDelete:"Delete group",groupEdit:"Edit group",openSettings:"Open app settings, then Notifications, and allow notifications.",notificationDenied:"Permission is disabled. Open notification settings to enable it.",setupTitle:"Background operation setup",setupDescription:"Allow the settings below so Android can deliver expiry reminders in the background. Return here after changing a setting to refresh its status.",setupNotifications:"Allow notifications",setupBattery:"Allow unrestricted battery use",setupAutostart:"Allow auto-start",statusReady:"Enabled",statusNeedsAction:"Needs attention",statusManual:"Check manually",openSetting:"Open settings",refreshSetup:"Check settings again",setupUnsupported:"These settings are available only in the installed Android app.",batteryHelp:"Choose Unrestricted or No restrictions if available.",autostartHelp:"On Xiaomi, Redmi and POCO, enable Autostart in the Security settings. The option name can vary by system version."
     },
     zh:{
       date:"日期",notifications:"通知",notificationDesc:"启用通知后，Android 会提前安排到期提醒。关闭应用后仍可接收通知，无需保持应用开启。",inventory:"库存",search:"搜索物品...",itemName:"物品名称",group:"分组",storage:"存放位置",quantity:"数量",unit:"单位",created:"生产 / 制备日期",expiry:"到期日期",expiryInfo:"有效期信息",expiryDays:"保质期（天）",photo:"照片",notes:"备注",other:"其他",close:"关闭",cancel:"取消",save:"保存物品",
@@ -151,6 +151,31 @@
       return;
     }
     status.textContent = await permissionState(plugin) ? t("enabled") : t("disabled");
+  }
+  async function renderBackgroundSetup() {
+    const host=$("backgroundSetup");
+    if(!host)return;
+    const settings=SETTINGS_PLUGIN();
+    if(!isNative()||!settings||typeof settings.getSetupStatus!=="function"){
+      host.innerHTML='<strong>'+t("setupTitle")+'</strong><p>'+t("setupUnsupported")+'</p>';
+      return;
+    }
+    try{
+      const state=await settings.getSetupStatus();
+      const row=(key,ready,page,help="")=>'<div class="background-setup-row"><div><strong>'+t(key)+'</strong><small>'+help+'</small><span class="setup-state '+(ready?'is-ready':'needs-action')+'">'+t(ready?'statusReady':'statusNeedsAction')+'</span></div><button type="button" class="secondary-button" data-setup-page="'+page+'">'+t("openSetting")+'</button></div>';
+      host.innerHTML='<strong>'+t("setupTitle")+'</strong><p>'+t("setupDescription")+'</p>'+
+        row("setupNotifications",Boolean(state.notificationsEnabled&&state.channelEnabled),"notifications")+
+        row("setupBattery",Boolean(state.batteryUnrestricted),"battery",t("batteryHelp"))+
+        row("setupAutostart",false,"autostart",t("autostartHelp"))+
+        '<button type="button" class="text-button" id="refreshBackgroundSetup">'+t("refreshSetup")+'</button>';
+      host.querySelectorAll("[data-setup-page]").forEach(button=>button.addEventListener("click",async()=>{
+        try{await settings.openSetupPage({page:button.dataset.setupPage});}catch(error){console.warn("Could not open Android setup page",error);}
+      }));
+      $("refreshBackgroundSetup")?.addEventListener("click",renderBackgroundSetup);
+    }catch(error){
+      console.warn("Could not read Android background setup",error);
+      host.innerHTML='<strong>'+t("setupTitle")+'</strong><p>'+t("setupUnsupported")+'</p>';
+    }
   }
   async function openNotificationSettings(plugin) {
     const settings = SETTINGS_PLUGIN();
@@ -352,13 +377,17 @@
   }
   applyStatusShortcut(".soon-card","soon");
   applyStatusShortcut(".expired-card","expired");
+  const setupHost=document.createElement("section");
+  setupHost.id="backgroundSetup";
+  setupHost.className="background-setup";
+  $("notificationSettingsDescription")?.insertAdjacentElement("afterend",setupHost);
   $("enableNotifications")?.addEventListener("click",enableNotifications);
   $("testNotifications")?.addEventListener("click",testNotifications);
   $("languageSelect")?.addEventListener("change",updateLabels);
-  $("settingsToggle")?.addEventListener("click",()=>setTimeout(refreshPermissionStatus,100));
+  $("settingsToggle")?.addEventListener("click",()=>setTimeout(()=>{refreshPermissionStatus();renderBackgroundSetup();},250));
   window.addEventListener("redro-time-updated",updateDate);
-  window.addEventListener("focus",refreshPermissionStatus);
-  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){refreshPermissionStatus();updateDate();}});
+  window.addEventListener("focus",()=>{refreshPermissionStatus();renderBackgroundSetup();});
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){refreshPermissionStatus();renderBackgroundSetup();updateDate();}});
   const previousApply = applyPreferences;
   applyPreferences = function applyEnhancedPreferences() {
     previousApply();
@@ -366,7 +395,7 @@
   };
   document.addEventListener("DOMContentLoaded",()=>{});
   updateLabels();
-  setTimeout(refreshPermissionStatus,800);
+  setTimeout(()=>{refreshPermissionStatus();renderBackgroundSetup();},800);
   if (window.Capacitor?.Plugins?.LocalNotifications?.addListener) {
     window.Capacitor.Plugins.LocalNotifications.addListener("localNotificationActionPerformed",event=>{
       const id=event?.notification?.extra?.itemId;
